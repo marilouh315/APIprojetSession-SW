@@ -26,7 +26,20 @@ app.use(express.json())
 const morgan = require('morgan')
 app.use(morgan('dev')); // format prédifini, voir dans la doc
 
+/**
+ * Documentation.json
+ */
+const swaggerUi = require('swagger-ui-express');
+// Le fichier de documentation JSON, ajustez selon votre projet
+const swaggerDocument = require('./src/config/documentation.json');
+// Options le l'interface, changez le titre "Demo API" pour le nom de votre projet 
+const swaggerOptions = {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Projet de session API | Service Web"
+};
 
+//Routes pour la documentation.json
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
 //Route ACCEUIL
 app.get('api/taches/acceuil', (req, res) => {
@@ -36,6 +49,10 @@ app.get('api/taches/acceuil', (req, res) => {
 //Routes TACHES
 const tachesRoutes = require('./src/routes/appJS.route');
 app.use('/api/liste_taches', tachesRoutes);
+
+//Routes UTILISATEURS
+const utilisateruRoutes = require('./src/routes/utilisateur.route');
+app.use('/api/users', utilisateruRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);

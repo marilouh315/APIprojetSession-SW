@@ -1,0 +1,1432 @@
+{
+    "openapi": "3.1.0",
+    "info":{
+        "title": "Projet de session API | Maril",
+        "summary": "Un projet API pour gérer tes oublis et organiser ta vie",
+        "description": "API qui permet de gérer une liste de tâches dans lequel on peut effectuer différentes actions (CRUD)",
+        "contact": {
+            "name": "Maril",
+            "url": "",
+            "email": "ne_me_contactez_pas@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/",
+            "description": "Serveur de développement"
+        },
+        {
+            "url": "",
+            "description": "Serveur en ligne"
+        }
+    ],
+
+
+    "paths" : {
+        "/api/liste_taches/all" : { 
+            "get" : {
+                "description": "Retourne la liste de toutes les tâches (incomplètes et complètes)",
+                "summary": "Lister toutes les tâches",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "description": "Toutes les tâches sont affichées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_taches"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                      "description": "Aucunes tâches ont été trouvées.",
+                      "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non trouvée(s).",
+                                    "message": "Aucunes tâches ont été trouvées."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                      "description": "Erreur serveur : lors de la récupération de toutes les tâches.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la récupération de toutes les tâches."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/" : {
+            "get" : {
+                "description": "Retourne la liste de toutes les tâches par défaut (incomplètes)",
+                "summary": "Lister toutes les tâches par défaut",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "description": "Toutes les tâches par défaut sont affichées avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_taches"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                      "description": "Aucunes tâches par défaut ont été trouvées.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non trouvée(s).",
+                                    "message": "Aucunes tâches par défaut ont été trouvées."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                      "description": "Erreur serveur : lors de la récupération des tâches par défaut.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la récupération des tâches par défaut."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/detail/{id_tache}" : {
+            "get":{
+                "description": "Retourne les détails d'une tâche spécifique (tâches et sous-tâches)",
+                "summary": "Afficher les détails complets d'une tâche.",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id_tache",
+                        "in": "path",
+                        "description": "ID de la tâche à afficher",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses" :{
+                    "200": {
+                        "description": "Les détails de la tâche affichés avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_detail_tache"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "ID de tâche invalide ou inexistant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Erreur des données.",
+                                    "message": "L'id de la tâche est obligatoire et doit être supérieur à 0."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La tâche et ses détails sont introuvables avec cet ID.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non trouvée(s).",
+                                    "message": "La tâche est introuvable avec l'id donné."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la récupération des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la récupération des détails de la tâche."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/tache" : {
+            "post":{
+                "description": "Ajoute une tâche à la liste des tâches",
+                "summary": "Ajouter une tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_ajouter_tache"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La nouvelle tâche a été ajoutée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_ajout_tache"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La tâche n'a pas pu être ajoutée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur d'ajout.",
+                                    "message": "La tache n'a pas pu être ajoutée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de l'ajout des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de l'ajout de la tâche.."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put":{
+                "description": "Modifie une tâche existante dans la liste des tâches",
+                "summary": "Modifier une tâche complète",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_modifier_tache_complete"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La tâche a été modifiée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_modif_tache_complete"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La tâche n'a pas pu être modifiée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de modification.",
+                                    "message": "La tâche n'a pas pu être modifiée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la modification des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la mise à jour de la tâche avec l'ID donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/tache/update_statut" : {
+            "put": {
+                "description": "Modifie le statut d'une tâche (complète ou incomplète)",
+                "summary": "Modifier statut d'une tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_modifier_statut_tache"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Le statut de la tâche a été modifié avec succès!"
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La tâche n'a pas pu être modifiée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de modification.",
+                                    "message": "Le statut de la tâche n'a pas pu être modifié. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la modification des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la mise à jour du statut de la tâche avec l'ID donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/tache/{id_tache}" : {
+            "delete": {
+                "description": "Supprime une tâche de la liste des tâches",
+                "summary": "Supprimer une tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id_tache",
+                        "in": "path",
+                        "description": "ID de la tâche à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                    },
+                    "400": {
+                        "description": "ID de tâche invalide ou inexistant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Erreur des données.",
+                                    "message": "L'id de la tâche est obligatoire et doit être supérieur à 0."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La tâche n'a pas pu être supprimée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de suppression.",
+                                    "message": "La tâche n'a pas pu être supprimée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la suppression des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la suppression de la tâche avec l'ID donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/sous_tache" : {
+            "post": {
+                "description": "Ajoute une sous-tâche à une tâche existante dans la liste des tâches",
+                "summary": "Ajouter une sous-tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_ajouter_soustache"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La nouvelle sous-tâche a été ajoutée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_ajout_soustache"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La sous-tâche n'a pas pu être ajoutée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur d'ajout.",
+                                    "message": "La sous-tâche n'a pas pu être ajoutée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de l'ajout des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de l'ajout de la sous-tâche."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put" :{
+                "description": "Modifie une sous-tâche existante complète dans la liste des tâches",
+                "summary": "Modifier une sous-tâche complète",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_modifier_soustache"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "La sous-tâche a été modifiée avec succès!",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Reponse_modif_soustache"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Format des données invalides ou manquantes.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Erreur400"
+                                    },
+                                    "example": {
+                                        "erreur": "Donnée(s) non valide(s).",
+                                        "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "La sous-tâche n'a pas pu être modifiée.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Erreur404"
+                                    },
+                                    "example": {
+                                        "erreur": "Erreur de modification.",
+                                        "message": "Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu."
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Erreur serveur : lors de la modification des données.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Erreur500"
+                                    },
+                                    "example": {
+                                        "erreur": "Erreur serveur.",
+                                        "message": "Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID donné."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/sous_tache/update_statut" : {
+            "put": {
+                "description": "Modifie le statut d'une sous-tâche (complète ou incomplète)",
+                "summary": "Modifier statut d'une sous-tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_modifier_statut_soustache"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Le statut de la sous-tâche a été modifié avec succès!"
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La sous-tâche n'a pas pu être modifiée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de modification.",
+                                    "message": "Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la modification des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/liste_taches/sous_tache/{id_sous_tache}" : {
+            "delete": {
+                "description": "Supprime une sous-tâche de la liste des tâches",
+                "summary": "Supprimer une sous-tâche",
+                "security": [
+                    {
+                        "CleApiAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id_sous_tache",
+                        "in": "path",
+                        "description": "ID de la sous-tâche à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "La sous-tâche a été supprimée avec succès!"
+                    },
+                    "400": {
+                        "description": "ID de sous-tâche invalide ou inexistant.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Erreur des données.",
+                                    "message": "L'id de la sous-tâche est obligatoire et doit être supérieur à 0."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La sous-tâche n'a pas pu être supprimée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de suppression.",
+                                    "message": "La sous-tâche n'a pas pu être supprimée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la suppression des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la suppression de la sous-tâche avec l'ID donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/": {
+            "post": {
+                "description": "Créer un nouvel utilisateur dans la base de donnée",
+                "summary": "Créer utilisateur",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_ajouter_utilisateur"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "L'utilisateur a été ajouté avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_ajout_utilisateur"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "L'utilisateur n'a pas pu être ajouté.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur d'ajout.",
+                                    "message": "L'utilisateur n'a pas pu être ajouté. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de l'ajout des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de l'ajout de l'utilisateur."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Générer une nouvelle clé API pour un utilisateur existant",
+                "summary": "Générer une nouvelle clé API",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_generer_cleAPI"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La clé API a été générée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_generer_cleAPI"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Mauvais champs (courriel ou mot de passe) invalides.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Erreur des données.",
+                                    "message": "Mauvais courriel ou mot de passe. Les champs passés en paramètre ne correspondent pas."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La clé API n'a pas pu être générée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de génération.",
+                                    "message": "La clé API n'a pas pu être générée. Un problème est survenu."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la génération de la clé API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la génération de la clé API pour l'utilisateur avec le courriel donné."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "Affiche la clé d'API d'un utilisateur spécifique",
+                "summary": "Afficher la clé API",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Parametre_body_afficher_cleAPI"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La clé API a été affichée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_afficher_cleAPI"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Mauvais champs (courriel ou mot de passe) invalides.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Erreur des données.",
+                                    "message": "Mauvais courriel ou mot de passe. Les champs passés en paramètre ne correspondent pas."
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "La clé API n'a pas pu être affichée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non trouvée(s).",
+                                    "message": "Les données sont introuvables pour l'utilisateur avec le courriel passé."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de l'affichage de la clé API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la récupération des données."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components" : {
+        "securitySchemes": {
+            "CleApiAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+            }
+        },
+        "schemas": {
+            "Reponse_taches" : {
+                "type": "object",
+                "properties" : {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "1"
+                    },
+                    "titre": {
+                        "type": "string",
+                        "example": "Tache en test"
+                    },
+                    "complete": {
+                        "type": "boolean",
+                        "example": "0"
+                    }
+
+                }
+                
+            },
+            "Reponse_detail_tache" : {
+                "type": "object",
+                "properties" : {
+                    "titre": {
+                        "type": "string",
+                        "example": "Tache 3"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description 3e tache"
+                    },
+                    "date_creation": {
+                        "type": "date",
+                        "example": "2023-12-12T05:00:00.000Z"
+                    },
+                    "date_echeance": {
+                        "type": "date",
+                        "example": "2024-02-23T05:00:00.000Z"
+                    },
+                    "sous_taches": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "titre_sous_tache": {
+                                    "type": "string",
+                                    "example": "Sous tache complete (Tache 3)"
+                                },
+                                "complete_sous_tache": {
+                                    "type": "boolean",
+                                    "example": "1"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Reponse_ajout_tache" : {
+                "type": "object",
+                "properties" : {
+                    "last_insertID": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "10"
+                    },
+                    "utilisateur_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "1"
+                    },
+                    "titre_tache": {
+                        "type": "string",
+                        "example": "Nouvelle tâche"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description test"
+                    },
+                    "date_debut": {
+                        "type": "date",
+                        "example": "2022-03-23"
+                    },
+                    "date_echeance": {
+                        "type": "date",
+                        "example": "2022-03-23"
+                    },
+                    "complete": {
+                        "type": "tinyint",
+                        "example": "0"
+                    }
+                }
+            },
+            "Parametre_body_ajouter_tache" : {
+                "type": "object",
+                "properties": {
+                    "utilisateur_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de l'utilisateur."
+                    },
+                    "titre_tache": {
+                        "type": "string",
+                        "description": "Titre de la tâche."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "La description de la tâche."
+                    },
+                    "date_debut": {
+                        "type": "string",
+                        "description": "La date de début de la tâche."
+                    },
+                    "date_echeance": {
+                        "type": "string",
+                        "description": "La date d'échéance de la tâche."
+                    },
+                    "complete_tache": {
+                        "type": "tinyint",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                    }
+                },
+                "required": ["utilisateur_id", "titre_tache", "description", "date_debut", "date_echeance", "complete_tache"]
+            },
+            "Parametre_body_modifier_statut_tache" : {
+                "type": "object",
+                "properties": {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la tâche à modifier."
+                    },
+                    "complete_tache": {
+                        "type": "int",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                    }
+                },
+                "required": ["id_tache", "complete_tache"]
+            },
+            "Parametre_body_modifier_tache_complete" : {
+                "type": "object",
+                "properties": {
+                    "utilisateur_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de l'utilisateur."
+                    },
+                    "titre_tache": {
+                        "type": "string",
+                        "description": "Titre de la tâche."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "La description de la tâche."
+                    },
+                    "date_debut": {
+                        "type": "string",
+                        "description": "La date de début de la tâche."
+                    },
+                    "date_echeance": {
+                        "type": "string",
+                        "description": "La date d'échéance de la tâche."
+                    },
+                    "complete_tache": {
+                        "type": "tinyint",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                    },
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la tâche à modifier."
+                    }
+                },
+                "required": ["utilisateur_id", "titre_tache", "description", "date_debut", "date_echeance", "complete_tache", "id_tache"]
+            },
+            "Reponse_modif_tache_complete" : {
+                "type": "object",
+                "properties" : {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "10"
+                    },
+                    "utilisateur_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "1"
+                    },
+                    "titre_tache": {
+                        "type": "string",
+                        "example": "Nouvelle tâche"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description test"
+                    },
+                    "date_debut": {
+                        "type": "date",
+                        "example": "2022-03-23"
+                    },
+                    "date_echeance": {
+                        "type": "date",
+                        "example": "2022-03-23"
+                    },
+                    "complete": {
+                        "type": "tinyint",
+                        "example": "0"
+                    }
+                }
+            },
+            "Parametre_body_ajouter_soustache" : {
+                "type": "object",
+                "properties": {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la tâche à laquelle la sous-tâche sera reliée."
+                    },
+                    "titre_sous_tache": {
+                        "type": "string",
+                        "description": "Titre de la sous-tâche."
+                    },
+                    "complete_sous_tache": {
+                        "type": "tinyint",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                    }
+                },
+                "required": ["id_tache", "titre_sous_tache", "complete_sous_tache"]
+            },
+            "Reponse_ajout_soustache" : {
+                "type": "object",
+                "properties" : {
+                    "last_insertID": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "10"
+                    },
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "1"
+                    },
+                    "titre_sous_tache": {
+                        "type": "string",
+                        "example": "Nouvelle sous-tâche"
+                    },
+                    "complete_sous_tache": {
+                        "type": "tinyint",
+                        "example": "0"
+                    }
+                }
+            },
+            "Parametre_body_modifier_statut_soustache" : {
+                "type": "object",
+                "properties": {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la tâche à laquelle la sous-tâche est reliée."
+                    },
+                    "complete_sous_tache": {
+                        "type": "int",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                    },
+                    "id_sous_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la sous-tâche à modifier."
+                    }
+                },
+                "required": ["id_tache", "complete_sous_tache", "id_sous_tache"]
+            },
+            "Parametre_body_modifier_soustache" : {
+                "type": "object",
+                "properties": {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la tâche à laquelle la sous-tâche est reliée."
+                    },
+                    "titre_sous_tache": {
+                        "type": "string",
+                        "description": "Titre de la sous-tâche."
+                    },
+                    "complete_sous_tache": {
+                        "type": "tinyint",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                    },
+                    "id_sous_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "ID de la sous-tâche à modifier."
+                    }
+                },
+                "required": ["id_tache", "titre_sous_tache", "complete_sous_tache", "id_sous_tache"]
+            },
+            "Reponse_modif_soustache" : {
+                "type": "object",
+                "properties" : {
+                    "id_tache": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "1"
+                    },
+                    "titre_sous_tache": {
+                        "type": "string",
+                        "example": "Nouvelle sous-tâche modifiée"
+                    },
+                    "complete_sous_tache": {
+                        "type": "tinyint",
+                        "example": "0"
+                    }
+                }
+            },
+            "Parametre_body_ajouter_utilisateur" : {
+                "type": "object",
+                "properties": {
+                    "nom_utilisateur": {
+                        "type": "string",
+                        "description": "Nom de l'utilisateur."
+                    },
+                    "courriel_utilisateur": {
+                        "type": "string",
+                        "description": "Courriel de l'utilisateur."
+                    },
+                    "motDePasse_utilisateur": {
+                        "type": "string",
+                        "description": "Mot de passe de l'utilisateur."
+                    }
+                },
+                "required": ["nom_utilisateur", "courriel_utilisateur", "motDePasse_utilisateur"]
+            },
+            "Reponse_ajout_utilisateur" : {
+                "type": "object",
+                "properties" : {
+                    "last_insertID": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": "10"
+                    },
+                    "nom_utilisateur": {
+                        "type": "string",
+                        "example": "Nom nouvel utilisateur"
+                    },
+                    "courriel_utilisateur": {
+                        "type": "string",
+                        "exemple": "courriel@email.com" 
+                    },
+                    "motDePasse_utilisateur": {
+                        "type": "string",
+                        "example": "motdepasse123"
+                    },
+                    "cle_api": {
+                        "type": "string",
+                        "example": "123456789"
+                    }
+                }
+            },
+            "Parametre_body_generer_cleAPI" : {
+                "type": "object",
+                "properties": {
+                    "courriel_utilisateur": {
+                        "type": "string",
+                        "description": "Courriel de l'utilisateur."
+                    },
+                    "motDePasse_utilisateur": {
+                        "type": "string",
+                        "description": "Mot de passe de l'utilisateur."
+                    }
+                },
+                "required": ["courriel_utilisateur", "motDePasse_utilisateur"]
+            },
+            "Reponse_generer_cleAPI" : {
+                "type": "object",
+                "properties" : {
+                    "message": {
+                        "type": "string",
+                        "example": "Voici votre nouvelle clé API generée : 123456789"
+                    }
+                }
+            },
+            "Parametre_body_afficher_cleAPI" : {
+                "type": "object",
+                "properties": {
+                    "courriel_utilisateur": {
+                        "type": "string",
+                        "description": "Courriel de l'utilisateur."
+                    },
+                    "mot_de_passe": {
+                        "type": "string",
+                        "description": "Mot de passe de l'utilisateur."
+                    }
+                },
+                "required": ["courriel_utilisateur", "mot_de_passe"]
+            },
+            "Reponse_afficher_cleAPI" : {
+                "type": "object",
+                "properties" : {
+                    "cle_api": {
+                        "type": "string",
+                        "example": "Voici votre clé API : 987654321"
+                    }
+                }
+            },
+            "Erreur400" : {
+                "type": "object",
+                "properties" : {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Erreur404" : {
+                "type": "object",
+                "properties" : {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Erreur500" : {
+                "type": "object",
+                "properties" : {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

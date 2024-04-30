@@ -535,7 +535,7 @@ exports.supprimerTache = (req, res) => {
                             //Ici c'est contre indicatif, mais s'il le id n'existe plus, 
                             //c'est qu'il a été bel et bien supprimé de la BD
                             res.status(200).json({
-                                message: `La tâche avec l'ID ${id_tache}, ainsi que tous ses sous-tâches reliées ent été supprimés avec succès`,
+                                message: `La tâche avec l'ID ${id_tache}, ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimés avec succès`,
                             })
                         }
                         else {

@@ -214,32 +214,45 @@ Taches.supprimerTache = (id_tache) => {
     return new Promise((resolve, reject) => {
         // Récupérer les identifiants des sous-tâches liées à la tâche
         const selectSousTachesQuery = 'SELECT id FROM sous_tache WHERE tache_id = ?';
-        sql.query(selectSousTachesQuery, id_tache, (err, sousTaches) => {
+        sql.query(selectSousTachesQuery, [id_tache], (err, sousTaches) => {
             if (err) {
                 reject(err);
                 return;
             }
-
-            // Supprimer les sous-tâches associées
-            const sousTacheIds = sousTaches.map(sousTache => sousTache.id);
-            const deleteSousTachesQuery = 'DELETE FROM sous_tache WHERE id IN (?)';
-            sql.query(deleteSousTachesQuery, [sousTacheIds], (err, deleteSousTachesResult) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                // Supprimer la tâche principale
+            if (sousTaches.length === 0) {
+                // Aucune sous-tâche associée, supprimer directement la tâche principale
                 const deleteTacheQuery = 'DELETE FROM taches WHERE id = ?';
-                sql.query(deleteTacheQuery, id_tache, (err, deleteTacheResult) => {
+                sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
                     if (err) {
                         reject(err);
                         return;
                     }
 
-                    resolve({ tache: deleteTacheResult, sous_taches: deleteSousTachesResult });
+                    resolve({ tache: deleteTacheResult, sous_taches: [] });
                 });
-            });
+            }
+            else {
+                // Supprimer les sous-tâches associées
+                const sousTacheIds = sousTaches.map(sousTache => sousTache.id);
+                const deleteSousTachesQuery = 'DELETE FROM sous_tache WHERE tache_id IN (?)';
+                sql.query(deleteSousTachesQuery, [sousTacheIds], (err, deleteSousTachesResult) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+
+                    // Supprimer la tâche principale
+                    const deleteTacheQuery = 'DELETE FROM taches WHERE id = ?';
+                    sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+
+                        resolve({ tache: deleteTacheResult, sous_taches: deleteSousTachesResult });
+                    });
+                });
+            }
         });
     });
 };
