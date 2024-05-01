@@ -197,11 +197,11 @@ exports.ajouterTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== 0 && complete_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -295,14 +295,14 @@ exports.modifierStatutTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== 0 && complete_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
-    }
+    } 
 
     appJSModel.verifierExistenceID(id_tache)
     .then((idExiste) => {
@@ -411,11 +411,11 @@ exports.modifierAuCompletTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== 0 && complete_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -677,11 +677,11 @@ exports.ajouterSousTache = (req, res) => {
         });
     }
 
-    if (complete_sous_tache !== 0 && complete_sous_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_sous_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -773,11 +773,11 @@ exports.modifierStatutSousTache = (req, res) => {
         });
     }
 
-    if (complete_sous_tache !== 0 && complete_sous_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_sous_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -904,11 +904,11 @@ exports.modifierAuCompletSousTache = (req, res) => {
         });
     }
 
-    if (complete_sous_tache !== 0 && complete_sous_tache !== 1) {
+    if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_sous_tache' est un booléean, donc seulement 0 ou 1 sont acceptés.`
+            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
         });
         return;
     }
