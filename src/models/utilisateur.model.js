@@ -150,6 +150,7 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
                 reject(err);
             } 
             const mdpHashe = result.rows[0].password;
+            console.log("mot de passe hashe", mdpHashe);
 
             bcrypt.compare(motDePasse_utilisateur, mdpHashe, (erreur, resultatMDP) => {
                 if (erreur) {
