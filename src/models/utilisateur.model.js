@@ -21,7 +21,7 @@ Utilisateur.verifierCourrielUnique = (courriel) => {
             if (err) {
                 reject(err);
             }
-            print(result.rows[0].nbreCourriel === 0);
+            console.log(result.rows[0].nbreCourriel === 0);
             //resolve(result.rows[0].nbreCourriel === 0);
         })
     })
