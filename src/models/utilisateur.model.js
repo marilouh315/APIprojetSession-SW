@@ -15,18 +15,16 @@ const Utilisateur = (utilisateur) => {
  */
 Utilisateur.verifierCourrielUnique = (courriel) => {
     return new Promise((resolve, reject) => {
-        const requeteCourriel = 'SELECT COUNT(*) AS nbreCourriel FROM utilisateur WHERE courriel = $1;';
+        const requeteCourriel = 'SELECT COUNT(*) FROM utilisateur WHERE courriel = $1;';
         sql.query(requeteCourriel, [courriel], (err, result) => {
             if (err) {
                 reject(err);
             }
             console.log(courriel);
-            console.log(result.rows[0]);
-            console.log(result.rows[0].nbreCourriel);
-            // console.log(result.rows[0].nbreCourriel);
-            // console.log(result.rows.nbreCourriel);
-            // console.log(result.rows[0].nbreCourriel == 0);
-            //resolve(result.rows[0].nbreCourriel === 0);
+            console.log(parseInt(result.rows[0]));
+            console.log(parseInt(result.rows[0].count));
+            
+            //resolve(parseInt(result.rows[0].count === 0));
         })
     })
 }
