@@ -72,7 +72,7 @@ Utilisateur.creerUtilisateur = (nom, courriel, motDePasse, cleAPI) => {
 Utilisateur.verificationCleAPI = (length) => {
     return new Promise((resolve, reject) => {
         let cleAPI = Utilisateur.generateApiKey(length); // Génère une nouvelle clé API
-
+        console.log("cleapi", cleAPI);
         // Demande au modèle de vérifier si la clé API est unique
         Utilisateur.verifierCleUnique(cleAPI)
             .then(cleAPI_estUnique => {
@@ -110,6 +110,7 @@ Utilisateur.verifierCleUnique = (cleAPI) => {
             } else {
                 // Résout avec un booléen indiquant si la clé est unique ou non
                 let nbreCleAPI = result.rows[0].count;
+                console.log("verifierCleUnique", nbreCleAPI);
                 resolve(nbreCleAPI === 0);
             }
         });
@@ -122,12 +123,13 @@ Utilisateur.verifierCleUnique = (cleAPI) => {
  * @returns Retourne la clé d'API générée aléatoirement
  */
 Utilisateur.generateApiKey = (length) => {
-    let clé_API_generee = '';
+    let cle_API_generee = '';
     const characters = '0123456789';
     for (let i = 0; i < length; i++) {
-        clé_API_generee += characters.charAt(Math.floor(Math.random() * characters.length));
+        cle_API_generee += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    return clé_API_generee;
+    console.log(cle_API_generee);
+    return cle_API_generee;
 }
 
 
