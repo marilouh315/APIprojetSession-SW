@@ -72,14 +72,12 @@ Utilisateur.creerUtilisateur = (nom, courriel, motDePasse, cleAPI) => {
 Utilisateur.verificationCleAPI = (length) => {
     return new Promise((resolve, reject) => {
         let cleAPI = Utilisateur.generateApiKey(length); // Génère une nouvelle clé API
-        console.log("cleapi", cleAPI);
         // Demande au modèle de vérifier si la clé API est unique
         Utilisateur.verifierCleUnique(cleAPI)
         .then(cleAPI_estUnique => {
             if (cleAPI_estUnique) {
                 resolve(cleAPI); // Si la clé est unique, résout avec la clé générée
             } else {
-                console.log("marche verifierCleUnique");
                 // Si la clé n'est pas unique, génère une nouvelle clé et vérifie à nouveau
                 Utilisateur.verificationCleAPI(length)
                 .then(nouvelle_cleAPI => {
@@ -149,24 +147,25 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
             if (err) {
                 reject(err);
             } 
-            const mdpHashe = result.rows[0].password;
-            console.log("mot de passe hashe", mdpHashe);
-            console.log("mot de passe utilisateur", motDePasse_utilisateur);
-            bcrypt.compare(motDePasse_utilisateur, mdpHashe)
-            .then(res => {
-                if (res) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            })
-            .catch(erreur => {
-                console.log('Erreur : ', erreur);
-                res.status(500).json({
-                    erreur: `Erreur serveur`,
-                    message: `Erreur lors de la comparaison des mots de passe.`
+            const mdpStocke = result.rows[0].password;
+
+            if (bcrypt.getRounds(mdpStocke) > 0) {
+                // Le mot de passe est déjà haché, comparer les hachages
+                bcrypt.compare(motDePasse_utilisateur, mdpStocke)
+                .then(res => {
+                    if (res) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                })
+                .catch(erreur => {
+                    reject(erreur);
                 });
-            });           
+            } else {
+                // Le mot de passe est en clair, comparer directement
+                resolve(motDePasse_utilisateur === mdpStocke);
+            }       
         });
     })
 }
@@ -179,13 +178,14 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
  */
 Utilisateur.updateCleAPI = (courriel_utilisateur, cleAPI) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE utilisateur SET cle_api = $1 WHERE courriel = $1';
+        const update_requete = 'UPDATE utilisateur SET cle_api = $1 WHERE courriel = $2';
         const params_update = [cleAPI, courriel_utilisateur]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
+            console.log("updateCleAPI: ", update_resultat.rows);
             resolve(update_resultat.rows);
         })
     }) 
