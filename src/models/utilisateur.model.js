@@ -17,7 +17,7 @@ Utilisateur.verifierCourrielUnique = (courriel) => {
     return new Promise((resolve, reject) => {
         const requeteCourriel = 'SELECT COUNT(*) AS nbreCourriel FROM utilisateur WHERE courriel = $1';
 
-        sql.query(requeteCourriel, courriel, (err, result) => {
+        sql.query(requeteCourriel, [courriel], (err, result) => {
             if (err) {
                 reject(err);
             }
