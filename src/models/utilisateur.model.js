@@ -20,11 +20,9 @@ Utilisateur.verifierCourrielUnique = (courriel) => {
             if (err) {
                 reject(err);
             }
-            console.log(courriel);
-            console.log(parseInt(result.rows[0]));
             console.log(parseInt(result.rows[0].count));
-            
-            //resolve(parseInt(result.rows[0].count === 0));
+            const resultat_courriel = parseInt(result.rows[0].count);
+            resolve(resultat_courriel === 0);
         })
     })
 }

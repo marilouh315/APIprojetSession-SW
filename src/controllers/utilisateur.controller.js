@@ -51,58 +51,63 @@ exports.creerUtilisateur = (req, res) => {
             return;
         }
         else {
-            utilisateurs.verificationCleAPI(8)
-            .then(cleAPI => {// Attendez que la promesse soit résolue
-                if (!cleAPI) {
-                    res.status(404);
-                    res.send({
-                        erreur: `Errreur de génération de clé d'API.`,
-                        message: `La clé d'API n'a pas pu être générée. Un problème est survenu.`
-                    });
-                    return;
-                }
-                else {
-                    console.log(cleAPI); // Maintenant cleAPI est résolu et contient la clé API générée
-                
-                    utilisateurs.creerUtilisateur(nom_utilisateur, courriel_utilisateur, motDePasse_utilisateur, cleAPI)
-                    .then(resultat_utilisateur => {
-                        if (!resultat_utilisateur) {
-                            res.status(404).json;
-                                res.send({
-                                    erreur: `Erreur d'ajout.`,
-                                    message: `L'utilisateur n'a pas pu être ajoutée. Un problème est survenu.`
-                                });
-                                return;
-                        }
-                        res.status(200).json({
-                            message: `L'utilisateur ${nom_utilisateur} a été ajouté avec succès.`,
-                            tache_ajoutee: {
-                                lastID: resultat_utilisateur.insertId,
-                                nom_utilisateur,
-                                courriel_utilisateur,
-                                motDePasse_utilisateur,
-                                cleAPI
-                            }
-                        });
-                    })
-                    .catch(erreur => {
-                        console.log('Erreur : ', erreur);
-                        res.status(500).json
-                        res.send({
-                            erreur: `Erreur serveur`,
-                            message: `Erreur lors de l\'ajout de l\'utilisateur.`
-                        });
-                    });
-                }
-            })
-            .catch(erreur => {
-                console.log('Erreur : ', erreur);
-                res.status(500).json
-                res.send({
-                    erreur: `Erreur serveur`,
-                    message: `Erreur lors de la génération de la clé API.`
-                });
+            res.status(200);
+            res.send({
+                message: 'Vous pouvez utiliser ce courriel!!!!'
             });
+            return;
+            // utilisateurs.verificationCleAPI(8)
+            // .then(cleAPI => {// Attendez que la promesse soit résolue
+            //     if (!cleAPI) {
+            //         res.status(404);
+            //         res.send({
+            //             erreur: `Errreur de génération de clé d'API.`,
+            //             message: `La clé d'API n'a pas pu être générée. Un problème est survenu.`
+            //         });
+            //         return;
+            //     }
+            //     else {
+            //         console.log(cleAPI); // Maintenant cleAPI est résolu et contient la clé API générée
+                
+            //         utilisateurs.creerUtilisateur(nom_utilisateur, courriel_utilisateur, motDePasse_utilisateur, cleAPI)
+            //         .then(resultat_utilisateur => {
+            //             if (!resultat_utilisateur) {
+            //                 res.status(404).json;
+            //                     res.send({
+            //                         erreur: `Erreur d'ajout.`,
+            //                         message: `L'utilisateur n'a pas pu être ajoutée. Un problème est survenu.`
+            //                     });
+            //                     return;
+            //             }
+            //             res.status(200).json({
+            //                 message: `L'utilisateur ${nom_utilisateur} a été ajouté avec succès.`,
+            //                 tache_ajoutee: {
+            //                     lastID: resultat_utilisateur.insertId,
+            //                     nom_utilisateur,
+            //                     courriel_utilisateur,
+            //                     motDePasse_utilisateur,
+            //                     cleAPI
+            //                 }
+            //             });
+            //         })
+            //         .catch(erreur => {
+            //             console.log('Erreur : ', erreur);
+            //             res.status(500).json
+            //             res.send({
+            //                 erreur: `Erreur serveur`,
+            //                 message: `Erreur lors de l\'ajout de l\'utilisateur.`
+            //             });
+            //         });
+            //     }
+            // })
+            // .catch(erreur => {
+            //     console.log('Erreur : ', erreur);
+            //     res.status(500).json
+            //     res.send({
+            //         erreur: `Erreur serveur`,
+            //         message: `Erreur lors de la génération de la clé API.`
+            //     });
+            // });
         }
     })
     .catch(erreur => {
