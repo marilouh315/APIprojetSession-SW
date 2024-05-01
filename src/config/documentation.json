@@ -13,10 +13,6 @@
     },
     "servers": [
         {
-            "url": "http://localhost:3000/",
-            "description": "Serveur de développement"
-        },
-        {
             "url": "https://app-taches.onrender.com",
             "description": "Serveur en ligne"
         }
