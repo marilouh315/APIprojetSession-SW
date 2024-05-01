@@ -59,7 +59,7 @@ Taches.afficherToutesTaches = (complete_tache) => {
  */
 Taches.afficherTachesParDefaut = () => {
     return new Promise((resolve, reject) => {
-        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = $1`;
+        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = false`;
         sql.query(requete, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
