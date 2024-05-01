@@ -1,4 +1,4 @@
-const sql = require("../config/db.js");
+const sql = require("../config/db_pg.js");
 
 const Taches = (taches) => {}
 
@@ -9,13 +9,13 @@ const Taches = (taches) => {}
  */
 Taches.verifierExistenceID = (id_tache) => {
     return new Promise((resolve, reject) => {
-        const requete = "SELECT COUNT(*) AS nbre_id FROM taches WHERE id = ?";
+        const requete = "SELECT COUNT(*) AS nbre_id FROM taches WHERE id = $1";
         sql.query(requete, [id_tache], (err, resultats) => {
             if (err) {
                 reject(err);
                 return;
             }
-            resolve(resultats[0].nbre_id > 0);
+            resolve(resultats.rows[0].nbre_id > 0);
         });
     });
 }
@@ -27,13 +27,13 @@ Taches.verifierExistenceID = (id_tache) => {
  */
 Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
     return new Promise((resolve, reject) => {
-        const requete = "SELECT COUNT(*) AS nbre_id FROM sous_tache WHERE id = ?";
+        const requete = "SELECT COUNT(*) AS nbre_id FROM sous_tache WHERE id = $1";
         sql.query(requete, [id_sous_tache], (err, resultats) => {
             if (err) {
                 reject(err);
                 return;
             }
-            resolve(resultats[0].nbre_id > 0);
+            resolve(resultats.rows[0].nbre_id > 0);
         });
     });
 }
@@ -49,7 +49,7 @@ Taches.afficherToutesTaches = (complete_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     })
     
@@ -59,12 +59,12 @@ Taches.afficherToutesTaches = (complete_tache) => {
  */
 Taches.afficherTachesParDefaut = () => {
     return new Promise((resolve, reject) => {
-        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = 0`;
+        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = $1`;
         sql.query(requete, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     })
     
@@ -78,14 +78,14 @@ Taches.afficherTachesParDefaut = () => {
 Taches.afficherDetailTache = (id_tache) => {
     return new Promise((resolve, reject) => {
         const requete = 
-        `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = ?`;
+        `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = $1`;
         const params = [id_tache];
 
         sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     })
 }
@@ -97,14 +97,14 @@ Taches.afficherDetailTache = (id_tache) => {
 Taches.afficherSousTaches = (id_tache) => {
     return new Promise((resolve, reject) => {
         const requete = 
-        `SELECT st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = ?`;
+        `SELECT st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = $1`;
         const params = [id_tache];
 
         sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     })
 }
@@ -116,13 +116,13 @@ Taches.afficherSousTaches = (id_tache) => {
  */
 Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
     return new Promise((resolve, reject) => {
-        const requete = "SELECT COUNT(*) AS nbre_id FROM utilisateur WHERE id = ?";
+        const requete = "SELECT COUNT(*) AS nbre_id FROM utilisateur WHERE id = $1";
         sql.query(requete, [utilisateur_id], (err, resultats) => {
             if (err) {
                 reject(err);
                 return;
             }
-            resolve(resultats[0].nbre_id > 0);
+            resolve(resultats.rows[0].nbre_id > 0);
         });
     });
 }
@@ -140,14 +140,14 @@ Taches.ajouterTache = (
     utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache
 ) => {
     return new Promise((resolve, reject) => {
-        const requete = `INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete) VALUES (?, ?, ?, ?, ?, ?)`;
+        const requete = `INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete) VALUES ($1, $2, $3, $4, $5, $6)`;
         const params = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache]
 
         sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     }) 
 }
@@ -172,14 +172,14 @@ Taches.modifierAuCompletTache = (
     id_tache
 ) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE taches SET utilisateur_id = ?, titre = ?, description = ?, date_debut = ?, date_echeance = ?, complete = ? WHERE id = ?';
+        const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7';
         const params_update = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache, id_tache]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat);
+            resolve(update_resultat.rows);
         })
     }) 
 
@@ -193,14 +193,14 @@ Taches.modifierAuCompletTache = (
  */
 Taches.modifierStatutTache = (complete_tache, id_tache) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE taches SET complete = ? WHERE id = ?';
+        const update_requete = 'UPDATE taches SET complete = $1 WHERE id = $2';
         const params_update = [complete_tache, id_tache]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat);
+            resolve(update_resultat.rows);
         })
     }) 
 }
@@ -213,7 +213,7 @@ Taches.modifierStatutTache = (complete_tache, id_tache) => {
 Taches.supprimerTache = (id_tache) => {
     return new Promise((resolve, reject) => {
         // Récupérer les identifiants des sous-tâches liées à la tâche
-        const selectSousTachesQuery = 'SELECT id FROM sous_tache WHERE tache_id = ?';
+        const selectSousTachesQuery = 'SELECT id FROM sous_tache WHERE tache_id = $1';
         sql.query(selectSousTachesQuery, [id_tache], (err, sousTaches) => {
             if (err) {
                 reject(err);
@@ -221,20 +221,20 @@ Taches.supprimerTache = (id_tache) => {
             }
             if (sousTaches.length === 0) {
                 // Aucune sous-tâche associée, supprimer directement la tâche principale
-                const deleteTacheQuery = 'DELETE FROM taches WHERE id = ?';
+                const deleteTacheQuery = 'DELETE FROM taches WHERE id = $1';
                 sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
                     if (err) {
                         reject(err);
                         return;
                     }
 
-                    resolve({ tache: deleteTacheResult, sous_taches: [] });
+                    resolve({ tache: deleteTacheResult.rows, sous_taches: [] });
                 });
             }
             else {
                 // Supprimer les sous-tâches associées
                 const sousTacheIds = sousTaches.map(sousTache => sousTache.id);
-                const deleteSousTachesQuery = 'DELETE FROM sous_tache WHERE tache_id IN (?)';
+                const deleteSousTachesQuery = 'DELETE FROM sous_tache WHERE tache_id IN ($1)';
                 sql.query(deleteSousTachesQuery, [sousTacheIds], (err, deleteSousTachesResult) => {
                     if (err) {
                         reject(err);
@@ -242,14 +242,14 @@ Taches.supprimerTache = (id_tache) => {
                     }
 
                     // Supprimer la tâche principale
-                    const deleteTacheQuery = 'DELETE FROM taches WHERE id = ?';
+                    const deleteTacheQuery = 'DELETE FROM taches WHERE id = $1';
                     sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
                         if (err) {
                             reject(err);
                             return;
                         }
 
-                        resolve({ tache: deleteTacheResult, sous_taches: deleteSousTachesResult });
+                        resolve({ tache: deleteTacheResult.rows, sous_taches: deleteSousTachesResult.rows });
                     });
                 });
             }
@@ -269,14 +269,14 @@ Taches.supprimerTache = (id_tache) => {
  */
 Taches.ajouterSousTache = (id_tache, titre_sous_tache, complete_sous_tache) => {
     return new Promise((resolve, reject) => {
-        const requete = `INSERT INTO sous_tache (tache_id, titre, complete) VALUES (?, ?, ?)`;
+        const requete = `INSERT INTO sous_tache (tache_id, titre, complete) VALUES ($1, $2, $3)`;
         const params = [id_tache, titre_sous_tache, complete_sous_tache]
 
         sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     }) 
 }
@@ -290,14 +290,14 @@ Taches.ajouterSousTache = (id_tache, titre_sous_tache, complete_sous_tache) => {
  */
 Taches.modifierStatutSousTache = (complete_sous_tache, id_tache, id_sous_tache) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE sous_tache SET complete = ? WHERE id = ?';
+        const update_requete = 'UPDATE sous_tache SET complete = $1 WHERE id = $2';
         const params_update = [complete_sous_tache, id_tache, id_sous_tache]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat);
+            resolve(update_resultat.rows);
         })
     }) 
 }
@@ -312,14 +312,14 @@ Taches.modifierStatutSousTache = (complete_sous_tache, id_tache, id_sous_tache) 
  */
 Taches.modifierAuCompletSousTache = (id_tache, titre_sous_tache, complete_sous_tache, id_sous_tache) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE sous_tache SET tache_id = ?, titre = ?, complete = ? WHERE id = ?';
+        const update_requete = 'UPDATE sous_tache SET tache_id = $1, titre = $2, complete = $3 WHERE id = $4';
         const params_update = [id_tache, titre_sous_tache, complete_sous_tache, id_sous_tache]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat);
+            resolve(update_resultat.rows);
         })
     }) 
 }
@@ -330,14 +330,14 @@ Taches.modifierAuCompletSousTache = (id_tache, titre_sous_tache, complete_sous_t
  * @returns 
  */
 Taches.supprimerSousTache = (id_sous_tache) => {
-    const delete_requete = 'DELETE FROM sous_tache WHERE id = ?';
+    const delete_requete = 'DELETE FROM sous_tache WHERE id = $1';
     return new Promise((resolve, reject) => {
         sql.query(delete_requete, id_sous_tache, (erreur, delete_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
             else {
-                resolve(delete_resultat)
+                resolve(delete_resultat.rows)
             }
         })
     })
@@ -355,14 +355,14 @@ Taches.supprimerSousTache = (id_sous_tache) => {
  */
 Taches.validerAuthorization = (id_tache, cleApi) => {
     return new Promise((resolve, reject) => {
-        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM taches t INNER JOIN utilisateur u  ON t.utilisateur_id = u.id WHERE t.id = ? AND u.cle_api = ?';
+        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM taches t INNER JOIN utilisateur u  ON t.utilisateur_id = u.id WHERE t.id = $1 AND u.cle_api = $2';
         const parametres = [id_tache, cleApi];
 
         sql.query(requeteValidation, parametres, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            if (resultat[0].nbTache <= 0) {
+            if (resultat.rows[0].nbTache <= 0) {
                 resolve(false);
             }
             else {
@@ -380,14 +380,14 @@ Taches.validerAuthorization = (id_tache, cleApi) => {
  */
 Taches.validerAuthorizationSousTaches = (id_sous_tache, cleApi) => {
     return new Promise((resolve, reject) => {
-        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM utilisateur u INNER JOIN taches t ON u.id = t.utilisateur_id INNER JOIN sous_tache st ON t.id = st.tache_id WHERE st.id = ? AND u.cle_api = ?';
+        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM utilisateur u INNER JOIN taches t ON u.id = t.utilisateur_id INNER JOIN sous_tache st ON t.id = st.tache_id WHERE st.id = $1 AND u.cle_api = $2';
         const parametres = [id_sous_tache, cleApi];
 
         sql.query(requeteValidation, parametres, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            if (resultat[0].nbTache <= 0) {
+            if (resultat.rows[0].nbTache <= 0) {
                 resolve(false);
             }
             else {
