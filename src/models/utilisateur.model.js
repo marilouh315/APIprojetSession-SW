@@ -75,23 +75,24 @@ Utilisateur.verificationCleAPI = (length) => {
         console.log("cleapi", cleAPI);
         // Demande au modèle de vérifier si la clé API est unique
         Utilisateur.verifierCleUnique(cleAPI)
-            .then(cleAPI_estUnique => {
-                if (cleAPI_estUnique) {
-                    resolve(cleAPI); // Si la clé est unique, résout avec la clé générée
-                } else {
-                    // Si la clé n'est pas unique, génère une nouvelle clé et vérifie à nouveau
-                    Utilisateur.verificationCleAPI(length)
-                    .then(nouvelle_cleAPI => {
-                        resolve(nouvelle_cleAPI);
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-                }
-            })
-            .catch(error => {
-                reject(error);
-            });
+        .then(cleAPI_estUnique => {
+            if (cleAPI_estUnique) {
+                resolve(cleAPI); // Si la clé est unique, résout avec la clé générée
+            } else {
+                console.log("marche verifierCleUnique");
+                // Si la clé n'est pas unique, génère une nouvelle clé et vérifie à nouveau
+                Utilisateur.verificationCleAPI(length)
+                .then(nouvelle_cleAPI => {
+                    resolve(nouvelle_cleAPI);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+            }
+        })
+        .catch(error => {
+            reject(error);
+        });
     });
 }
 
