@@ -105,12 +105,12 @@ Utilisateur.verifierCleUnique = (cleAPI) => {
     return new Promise((resolve, reject) => {
         // Requête SQL pour vérifier si la clé API est unique
         const checkQuery = 'SELECT COUNT(*) AS count FROM utilisateur WHERE cle_api = $1';
-        sql.query(checkQuery, cleAPI, (err, result) => {
+        sql.query(checkQuery, [cleAPI], (err, result) => {
             if (err) {
                 reject(err);
             } else {
                 // Résout avec un booléen indiquant si la clé est unique ou non
-                let nbreCleAPI = result.rows[0].count;
+                let nbreCleAPI = parseInt(result.rows[0].count);
                 console.log("verifierCleUnique", nbreCleAPI);
                 resolve(nbreCleAPI === 0);
             }
@@ -145,7 +145,7 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
     return new Promise((resolve, reject) => {
         const requeteMDP = 'SELECT password FROM utilisateur WHERE courriel = $1';
 
-        sql.query(requeteMDP, courriel_utilisateur, (err, result) => {
+        sql.query(requeteMDP, [courriel_utilisateur], (err, result) => {
             if (err) {
                 reject(err);
             } 
@@ -192,7 +192,7 @@ Utilisateur.getDonnees = (courriel_utilisateur) => {
     return new Promise((resolve, reject) => {
         const selectCle = 'SELECT cle_api FROM utilisateur WHERE courriel = $1';
 
-        sql.query(selectCle, courriel_utilisateur, (erreur, resultat) => {
+        sql.query(selectCle, [courriel_utilisateur], (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }

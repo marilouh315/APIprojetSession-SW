@@ -40,9 +40,8 @@ Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
 ///////////////////////////////////////////////////////////////////////////////////
 /**
  * Affiche toutes les tâches 
- * @param {Boolean si la tâche est incomplète ou non} complete_tache 
  */
-Taches.afficherToutesTaches = (complete_tache) => {
+Taches.afficherToutesTaches = () => {
     return new Promise((resolve, reject) => {
         const requete = `SELECT t.id, t.titre, t.complete FROM taches t`;
         sql.query(requete, (erreur, resultat) => {
@@ -332,7 +331,7 @@ Taches.modifierAuCompletSousTache = (id_tache, titre_sous_tache, complete_sous_t
 Taches.supprimerSousTache = (id_sous_tache) => {
     const delete_requete = 'DELETE FROM sous_tache WHERE id = $1';
     return new Promise((resolve, reject) => {
-        sql.query(delete_requete, id_sous_tache, (erreur, delete_resultat) => {
+        sql.query(delete_requete, [id_sous_tache], (erreur, delete_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
