@@ -16,11 +16,11 @@ const Utilisateur = (utilisateur) => {
 Utilisateur.verifierCourrielUnique = (courriel) => {
     return new Promise((resolve, reject) => {
         const requeteCourriel = 'SELECT COUNT(*) AS nbreCourriel FROM utilisateur WHERE courriel = $1;';
-
         sql.query(requeteCourriel, [courriel], (err, result) => {
             if (err) {
                 reject(err);
             }
+            console.log(result.rows);
             console.log(result.rows[0].nbreCourriel === 0);
             //resolve(result.rows[0].nbreCourriel === 0);
         })

@@ -42,7 +42,7 @@ exports.creerUtilisateur = (req, res) => {
     //Vérifie le courriel unique
     utilisateurs.verifierCourrielUnique(courriel_utilisateur)
     .then(courrielEstUnique => {
-        if (!courrielEstUnique) {
+        if (courrielEstUnique == false) {
             res.status(400);
             res.send({
                 erreur: `Donnée(s) non valide(s).`,
