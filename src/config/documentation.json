@@ -319,6 +319,20 @@
                             }
                         }
                     },
+                    "403": {
+                        "description": "L'accès est refusé pour la modification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à modifier cette tâche. Clé API invalide ou manquante."
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "La tâche n'a pas pu être modifiée.",
                         "content": {
@@ -383,6 +397,20 @@
                                 "example": {
                                     "erreur": "Donnée(s) non valide(s).",
                                     "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "L'accès est refusé pour la modification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à modifier ce statut de tâche. Clé API invalide ou manquante."
                                 }
                             }
                         }
@@ -452,6 +480,20 @@
                                 "example": {
                                     "erreur": "Erreur des données.",
                                     "message": "L'id de la tâche est obligatoire et doit être supérieur à 0."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "L'accès est refusé pour la suppression.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à supprimer cette tâche. Clé API invalide ou manquante."
                                 }
                             }
                         }
@@ -577,57 +619,71 @@
                                 "$ref": "#/components/schemas/Parametre_body_modifier_soustache"
                             }
                         }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "La sous-tâche a été modifiée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reponse_modif_soustache"
+                                }
+                            }
+                        }
                     },
-                    "responses": {
-                        "200": {
-                            "description": "La sous-tâche a été modifiée avec succès!",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "$ref": "#/components/schemas/Reponse_modif_soustache"
-                                    }
+                    "400": {
+                        "description": "Format des données invalides ou manquantes.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur400"
+                                },
+                                "example": {
+                                    "erreur": "Donnée(s) non valide(s).",
+                                    "message": "Le format des données est invalide. Tous les champs sont obligatoires."
                                 }
                             }
-                        },
-                        "400": {
-                            "description": "Format des données invalides ou manquantes.",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "$ref": "#/components/schemas/Erreur400"
-                                    },
-                                    "example": {
-                                        "erreur": "Donnée(s) non valide(s).",
-                                        "message": "Le format des données est invalide. Tous les champs sont obligatoires."
-                                    }
+                        }
+                    },
+                    "403": {
+                        "description": "L'accès est refusé pour la modification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à modifier cette sous-tâche. Clé API invalide ou manquante."
                                 }
                             }
-                        },
-                        "404": {
-                            "description": "La sous-tâche n'a pas pu être modifiée.",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "$ref": "#/components/schemas/Erreur404"
-                                    },
-                                    "example": {
-                                        "erreur": "Erreur de modification.",
-                                        "message": "Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu."
-                                    }
+                        }
+                    },
+                    "404": {
+                        "description": "La sous-tâche n'a pas pu être modifiée.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur404"
+                                },
+                                "example": {
+                                    "erreur": "Erreur de modification.",
+                                    "message": "Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu."
                                 }
                             }
-                        },
-                        "500": {
-                            "description": "Erreur serveur : lors de la modification des données.",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "$ref": "#/components/schemas/Erreur500"
-                                    },
-                                    "example": {
-                                        "erreur": "Erreur serveur.",
-                                        "message": "Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID donné."
-                                    }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur serveur : lors de la modification des données.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur500"
+                                },
+                                "example": {
+                                    "erreur": "Erreur serveur.",
+                                    "message": "Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID donné."
                                 }
                             }
                         }
@@ -668,6 +724,20 @@
                                 "example": {
                                     "erreur": "Donnée(s) non valide(s).",
                                     "message": "Le format des données est invalide. Tous les champs sont obligatoires."
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "L'accès est refusé pour la modification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à modifier ce statut de sous-tâche. Clé API invalide ou manquante."
                                 }
                             }
                         }
@@ -737,6 +807,20 @@
                                 "example": {
                                     "erreur": "Erreur des données.",
                                     "message": "L'id de la sous-tâche est obligatoire et doit être supérieur à 0."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "L'accès est refusé pour la suppression.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erreur403"
+                                },
+                                "example": {
+                                    "erreur": "Accès refusé.",
+                                    "message": "Vous n'êtes pas autorisé à supprimer cette sous-tâche. Clé API invalide ou manquante."
                                 }
                             }
                         }
@@ -1404,6 +1488,14 @@
                 }
             },
             "Erreur400" : {
+                "type": "object",
+                "properties" : {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Erreur403" : {
                 "type": "object",
                 "properties" : {
                     "message": {

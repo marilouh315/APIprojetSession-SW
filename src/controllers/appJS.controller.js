@@ -315,19 +315,39 @@ exports.modifierStatutTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.modifierStatutTache(complete_tache, id_tache)
-            .then((resultat_modif_statut) => {
-                if (!resultat_modif_statut) {
-                    res.status(404).json;
-                    res.send({
-                        erreur: `Erreur de modification.`,
-                        message: `Le statut de la tâche n'a pas pu être modifié. Un problème est survenu.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorization(id_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à modifier le statut de cette tâche. Clé API invalide ou manquante.`
                     });
-                    return;
-                }
+                } 
                 else {
-                    res.status(200).json({
-                        message: `Le statut de la tâche, avec l'id ${id_tache}, a été modifié avec succès. Nouveau statut : ${complete_tache}.`
+                    appJSModel.modifierStatutTache(complete_tache, id_tache)
+                    .then((resultat_modif_statut) => {
+                        if (!resultat_modif_statut) {
+                            res.status(404).json;
+                            res.send({
+                                erreur: `Erreur de modification.`,
+                                message: `Le statut de la tâche n'a pas pu être modifié. Un problème est survenu.`
+                            });
+                            return;
+                        }
+                        else {
+                            res.status(200).json({
+                                message: `Le statut de la tâche, avec l'id ${id_tache}, a été modifié avec succès. Nouveau statut : ${complete_tache}.`
+                            });
+                        }
+                    })
+                    .catch(erreur => {
+                        console.log('Erreur : ', erreur);
+                        res.status(500).json
+                        res.send({
+                            erreur: `Erreur serveur`,
+                            message: `Erreur lors de la mise à jour du statut de la tâche avec l'ID ${id_tache}.`
+                        });
                     });
                 }
             })
@@ -336,7 +356,7 @@ exports.modifierStatutTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la mise à jour du statut de la tâche avec l'ID ${id_tache}.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
         }
@@ -423,36 +443,56 @@ exports.modifierAuCompletTache = (req, res) => {
                     return;
                 }
                 else {
-                    appJSModel.modifierAuCompletTache(
-                        utilisateur_id,
-                        titre_tache,
-                        description,
-                        date_debut,
-                        date_echeance,
-                        complete_tache,
-                        id_tache
-                    )
-                    .then((resultat_update) => {
-                        if (!resultat_update) {
-                            res.status(404).json;
-                            res.send({
-                                erreur: `Erreur de modification.`,
-                                message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
+                    const cleApi = req.headers.authorization;
+                    appJSModel.validerAuthorization(id_tache, cleApi)
+                    .then((cleValide) => {
+                        if (!cleValide) {
+                            return res.status(403).json({
+                                erreur: `Accès refusé.`,
+                                message: `Vous n'êtes pas autorisé à modifier cette tâche. Clé API invalide ou manquante.`
                             });
-                            return;
-                        }
+                        } 
                         else {
-                            res.status(200).json({
-                                message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
-                                tache_modifiee: {
-                                    id_tache,
-                                    utilisateur_id,
-                                    titre_tache,
-                                    description,
-                                    date_debut,
-                                    date_echeance,
-                                    complete_tache
+                            appJSModel.modifierAuCompletTache(
+                                utilisateur_id,
+                                titre_tache,
+                                description,
+                                date_debut,
+                                date_echeance,
+                                complete_tache,
+                                id_tache
+                            )
+                            .then((resultat_update) => {
+                                if (!resultat_update) {
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de modification.`,
+                                        message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
+                                    });
+                                    return;
                                 }
+                                else {
+                                    res.status(200).json({
+                                        message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
+                                        tache_modifiee: {
+                                            id_tache,
+                                            utilisateur_id,
+                                            titre_tache,
+                                            description,
+                                            date_debut,
+                                            date_echeance,
+                                            complete_tache
+                                        }
+                                    });
+                                }
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
+                                });
                             });
                         }
                     })
@@ -461,7 +501,7 @@ exports.modifierAuCompletTache = (req, res) => {
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
+                            message: `Erreur lors de la validation de la clé API.`
                         });
                     });
                 }
@@ -518,28 +558,19 @@ exports.supprimerTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.supprimerTache(id_tache)
-            .then((resultat_supprime) => {
-                if (!resultat_supprime) {
-                    res.status(404).json;
-                    res.send({
-                        erreur: `Erreur de suppression.`,
-                        message: `La tache n'a pas pu être supprimée. Un problème est survenu.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorization(id_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à supprimer cette tâche. Clé API invalide ou manquante.`
                     });
-                    return;
-                }
+                } 
                 else {
-                    appJSModel.verifierExistenceID(id_tache)
-                    .then((idExiste) => {
-                        if (idExiste == false) {
-                            //Ici c'est contre indicatif, mais s'il le id n'existe plus, 
-                            //c'est qu'il a été bel et bien supprimé de la BD
-                            res.status(200).json({
-                                message: `La tâche avec l'ID ${id_tache}, ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimés avec succès`,
-                            })
-                        }
-                        else {
-                            //Ici, c'est qu'il est encore présent, et donc n'a pas été correctement supprimé
+                    appJSModel.supprimerTache(id_tache)
+                    .then((resultat_supprime) => {
+                        if (!resultat_supprime) {
                             res.status(404).json;
                             res.send({
                                 erreur: `Erreur de suppression.`,
@@ -547,14 +578,43 @@ exports.supprimerTache = (req, res) => {
                             });
                             return;
                         }
-                        
+                        else {
+                            appJSModel.verifierExistenceID(id_tache)
+                            .then((idExiste) => {
+                                if (idExiste == false) {
+                                    //Ici c'est contre indicatif, mais s'il le id n'existe plus, 
+                                    //c'est qu'il a été bel et bien supprimé de la BD
+                                    res.status(200).json({
+                                        message: `La tâche avec l'ID ${id_tache}, ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimés avec succès`,
+                                    })
+                                }
+                                else {
+                                    //Ici, c'est qu'il est encore présent, et donc n'a pas été correctement supprimé
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de suppression.`,
+                                        message: `La tache n'a pas pu être supprimée. Un problème est survenu.`
+                                    });
+                                    return;
+                                }
+                                
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la vérification de l'existence du ID de la tâche dans la bd.`
+                                });
+                            });
+                        }
                     })
                     .catch(erreur => {
                         console.log('Erreur : ', erreur);
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la vérification de l'existence du ID de la tâche dans la bd.`
+                            message: `Erreur lors de la suppression de la tâche avec l'ID ${id_tache}.`
                         });
                     });
                 }
@@ -564,7 +624,7 @@ exports.supprimerTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la suppression de la tâche avec l'ID ${id_tache}.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
         }
@@ -733,30 +793,50 @@ exports.modifierStatutSousTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.verifierExistenceIdSousTache(id_sous_tache)
-            .then((idExiste) => {
-                if (idExiste == false) {
-                    res.status(400).json;
-                    res.send({
-                        erreur: `Erreur des données.`,
-                        message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à modifier le statut de cette sous-tâche. Clé API invalide ou manquante.`
                     });
-                    return;
                 }
                 else {
-                    appJSModel.modifierStatutSousTache(complete_sous_tache, id_tache, id_sous_tache)
-                    .then((resultat_modif_statut) => {
-                        if (!resultat_modif_statut) {
-                            res.status(404).json;
+                    appJSModel.verifierExistenceIdSousTache(id_sous_tache)
+                    .then((idExiste) => {
+                        if (idExiste == false) {
+                            res.status(400).json;
                             res.send({
-                                erreur: `Erreur de modification.`,
-                                message: `Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu.`
+                                erreur: `Erreur des données.`,
+                                message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
                             });
                             return;
                         }
                         else {
-                            res.status(200).json({
-                                message: `Le statut de la sous-tâche, avec l'id ${id_sous_tache}, a été modifié avec succès. Nouveau statut : ${complete_sous_tache}.`
+                            appJSModel.modifierStatutSousTache(complete_sous_tache, id_tache, id_sous_tache)
+                            .then((resultat_modif_statut) => {
+                                if (!resultat_modif_statut) {
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de modification.`,
+                                        message: `Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu.`
+                                    });
+                                    return;
+                                }
+                                else {
+                                    res.status(200).json({
+                                        message: `Le statut de la sous-tâche, avec l'id ${id_sous_tache}, a été modifié avec succès. Nouveau statut : ${complete_sous_tache}.`
+                                    });
+                                }
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID ${id_sous_tache}.`
+                                });
                             });
                         }
                     })
@@ -765,7 +845,7 @@ exports.modifierStatutSousTache = (req, res) => {
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID ${id_sous_tache}.`
+                            message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
                         });
                     });
                 }
@@ -775,7 +855,7 @@ exports.modifierStatutSousTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
         }
@@ -845,40 +925,60 @@ exports.modifierAuCompletSousTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.verifierExistenceIdSousTache(id_sous_tache)
-            .then((idExiste) => {
-                if (idExiste == false) {
-                    res.status(400).json;
-                    res.send({
-                        erreur: `Erreur des données.`,
-                        message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à modifier cette sous-tâche. Clé API invalide ou manquante.`
                     });
-                    return;
                 }
                 else {
-                    appJSModel.modifierAuCompletSousTache(
-                        id_tache,
-                        titre_sous_tache,
-                        complete_sous_tache,
-                        id_sous_tache
-                    )
-                    .then((resultat_update) => {
-                        if (!resultat_update) {
-                            res.status(404).json;
+                    appJSModel.verifierExistenceIdSousTache(id_sous_tache)
+                    .then((idExiste) => {
+                        if (idExiste == false) {
+                            res.status(400).json;
                             res.send({
-                                erreur: `Erreur de modification.`,
-                                message: `La sous-tâche n'a pas pu être modifiée. Un problème est survenu.`
+                                erreur: `Erreur des données.`,
+                                message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
                             });
                             return;
                         }
                         else {
-                            res.status(200).json({
-                                message: `La sous-tâche avec l'ID ${id_sous_tache} a été mise à jour avec succès`,
-                                sous_tache_modifiee: {
-                                    id_tache,
-                                    titre_sous_tache,
-                                    complete_sous_tache
+                            appJSModel.modifierAuCompletSousTache(
+                                id_tache,
+                                titre_sous_tache,
+                                complete_sous_tache,
+                                id_sous_tache
+                            )
+                            .then((resultat_update) => {
+                                if (!resultat_update) {
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de modification.`,
+                                        message: `La sous-tâche n'a pas pu être modifiée. Un problème est survenu.`
+                                    });
+                                    return;
                                 }
+                                else {
+                                    res.status(200).json({
+                                        message: `La sous-tâche avec l'ID ${id_sous_tache} a été mise à jour avec succès`,
+                                        sous_tache_modifiee: {
+                                            id_tache,
+                                            titre_sous_tache,
+                                            complete_sous_tache
+                                        }
+                                    });
+                                }
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la mise à jour de la sous-tâche avec l'ID ${id_tache}.`
+                                });
                             });
                         }
                     })
@@ -887,7 +987,7 @@ exports.modifierAuCompletSousTache = (req, res) => {
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la mise à jour de la sous-tâche avec l'ID ${id_tache}.`
+                            message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
                         });
                     });
                 }
@@ -897,7 +997,7 @@ exports.modifierAuCompletSousTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
         }
@@ -945,43 +1045,63 @@ exports.supprimerSousTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.supprimerSousTache(id_sous_tache)
-            .then((resultat_supprime) => {
-                if (!resultat_supprime) {
-                    res.status(404).json;
-                    res.send({
-                        erreur: `Erreur de suppression.`,
-                        message: `La sous-tache n'a pas pu être supprimée. Un problème est survenu.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à supprimer cette sous-tâche. Clé API invalide ou manquante.`
                     });
-                    return;
                 }
                 else {
-                    appJSModel.verifierExistenceIdSousTache(id_sous_tache)
-                    .then((idExiste) => {
-                        if (idExiste == false) {
-                            //Ici c'est contre indicatif, mais s'il le id n'existe plus, 
-                            //c'est qu'il a été bel et bien supprimé de la BD
-                            res.status(200).json({
-                                message: `La sous-tâche avec l'ID ${id_sous_tache} a été supprimé avec succès`,
-                            })
-                        }
-                        else {
-                            //Ici, c'est qu'il est encore présent, et donc n'a pas été correctement supprimé
+                    appJSModel.supprimerSousTache(id_sous_tache)
+                    .then((resultat_supprime) => {
+                        if (!resultat_supprime) {
                             res.status(404).json;
                             res.send({
                                 erreur: `Erreur de suppression.`,
-                                message: `La sous-tâche n'a pas pu être supprimée. Un problème est survenu.`
+                                message: `La sous-tache n'a pas pu être supprimée. Un problème est survenu.`
                             });
                             return;
                         }
-                        
+                        else {
+                            appJSModel.verifierExistenceIdSousTache(id_sous_tache)
+                            .then((idExiste) => {
+                                if (idExiste == false) {
+                                    //Ici c'est contre indicatif, mais s'il le id n'existe plus, 
+                                    //c'est qu'il a été bel et bien supprimé de la BD
+                                    res.status(200).json({
+                                        message: `La sous-tâche avec l'ID ${id_sous_tache} a été supprimé avec succès`,
+                                    })
+                                }
+                                else {
+                                    //Ici, c'est qu'il est encore présent, et donc n'a pas été correctement supprimé
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de suppression.`,
+                                        message: `La sous-tâche n'a pas pu être supprimée. Un problème est survenu.`
+                                    });
+                                    return;
+                                }
+                                
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                                });
+                            });
+                        }
                     })
                     .catch(erreur => {
                         console.log('Erreur : ', erreur);
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                            message: `Erreur lors de la suppression de la sous-tâche avec l'ID ${id_sous_tache}.`
                         });
                     });
                 }
@@ -991,7 +1111,7 @@ exports.supprimerSousTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la suppression de la sous-tâche avec l'ID ${id_sous_tache}.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
         }

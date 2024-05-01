@@ -342,4 +342,58 @@ Taches.supprimerSousTache = (id_sous_tache) => {
         })
     })
 }
+
+
+
+
+
+/**
+ * Vérifie si l'utilisateur a le droit d'accéder à une tâche
+ * @param {Le id d'une tâche} id_tache 
+ * @param {La clé d'API de l'utilisateur} cleApi 
+ * @returns 
+ */
+Taches.validerAuthorization = (id_tache, cleApi) => {
+    return new Promise((resolve, reject) => {
+        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM taches t INNER JOIN utilisateur u  ON t.utilisateur_id = u.id WHERE t.id = ? AND u.cle_api = ?';
+        const parametres = [id_tache, cleApi];
+
+        sql.query(requeteValidation, parametres, (erreur, resultat) => {
+            if (erreur) {
+                reject(erreur);
+            }
+            if (resultat[0].nbTache <= 0) {
+                resolve(false);
+            }
+            else {
+                resolve(true); 
+            }
+        })
+    })
+}
+
+/**
+ * Vérifie si l'utilisateur a le droit d'accéder à une sous-tâche
+ * @param {Le id de la sous-tâche} id_sous_tache 
+ * @param {La clé d'API d'un utilisateur} cleApi 
+ * @returns 
+ */
+Taches.validerAuthorizationSousTaches = (id_sous_tache, cleApi) => {
+    return new Promise((resolve, reject) => {
+        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM utilisateur u INNER JOIN taches t ON u.id = t.utilisateur_id INNER JOIN sous_tache st ON t.id = st.tache_id WHERE st.id = ? AND u.cle_api = ?';
+        const parametres = [id_sous_tache, cleApi];
+
+        sql.query(requeteValidation, parametres, (erreur, resultat) => {
+            if (erreur) {
+                reject(erreur);
+            }
+            if (resultat[0].nbTache <= 0) {
+                resolve(false);
+            }
+            else {
+                resolve(true); 
+            }
+        })
+    })
+}
 module.exports = Taches;

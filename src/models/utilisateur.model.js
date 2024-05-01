@@ -223,7 +223,6 @@ Utilisateur.validationCle = (cleAPI) => {
     })
 }
 
-
 module.exports = Utilisateur;
 
 
