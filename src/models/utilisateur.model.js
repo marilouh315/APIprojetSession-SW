@@ -1,4 +1,4 @@
-const sql = require("../config/db.js");
+const sql = require("../config/db_pg.js");
 const bcrypt = require('bcrypt');
 
 const Utilisateur = (utilisateur) => {
@@ -15,13 +15,13 @@ const Utilisateur = (utilisateur) => {
  */
 Utilisateur.verifierCourrielUnique = (courriel) => {
     return new Promise((resolve, reject) => {
-        const requeteCourriel = 'SELECT COUNT(*) AS nbreCourriel FROM utilisateur WHERE courriel = ?';
+        const requeteCourriel = 'SELECT COUNT(*) AS nbreCourriel FROM utilisateur WHERE courriel = $1';
 
         sql.query(requeteCourriel, courriel, (err, result) => {
             if (err) {
                 reject(err);
             }
-            resolve(result[0].nbreCourriel === 0);
+            resolve(result.rows[0].nbreCourriel === 0);
         })
     })
 }
@@ -36,7 +36,7 @@ Utilisateur.verifierCourrielUnique = (courriel) => {
  *          ou rejette avec une erreur si une erreur se produit pendant le processus.
  */
 Utilisateur.creerUtilisateur = (nom, courriel, motDePasse, cleAPI) => {
-    const requeteInsertionUser = 'INSERT INTO utilisateur(nom, courriel, password, cle_api) VALUES (?, ?, ?, ?)';
+    const requeteInsertionUser = 'INSERT INTO utilisateur(nom, courriel, password, cle_api) VALUES ($1, $2, $3, $4)';
 
     return new Promise((resolve, reject) => {
         //On a déjà vérifié si le courriel était unique
@@ -53,7 +53,7 @@ Utilisateur.creerUtilisateur = (nom, courriel, motDePasse, cleAPI) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(result);
+                        resolve(result.rows);
                     }
                 });
             }
@@ -102,13 +102,13 @@ Utilisateur.verificationCleAPI = (length) => {
 Utilisateur.verifierCleUnique = (cleAPI) => {
     return new Promise((resolve, reject) => {
         // Requête SQL pour vérifier si la clé API est unique
-        const checkQuery = 'SELECT COUNT(*) AS count FROM utilisateur WHERE cle_api = ?';
+        const checkQuery = 'SELECT COUNT(*) AS count FROM utilisateur WHERE cle_api = $1';
         sql.query(checkQuery, cleAPI, (err, result) => {
             if (err) {
                 reject(err);
             } else {
                 // Résout avec un booléen indiquant si la clé est unique ou non
-                let nbreCleAPI = result[0].count;
+                let nbreCleAPI = result.rows[0].count;
                 resolve(nbreCleAPI === 0);
             }
         });
@@ -139,19 +139,19 @@ Utilisateur.generateApiKey = (length) => {
  */
 Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_utilisateur) => {
     return new Promise((resolve, reject) => {
-        const requeteMDP = 'SELECT password FROM utilisateur WHERE courriel = ?';
+        const requeteMDP = 'SELECT password FROM utilisateur WHERE courriel = $1';
 
         sql.query(requeteMDP, courriel_utilisateur, (err, result) => {
             if (err) {
                 reject(err);
             } 
-            const mdpHashe = result[0].password;
+            const mdpHashe = result.rows[0].password;
 
             bcrypt.compare(motDePasse_utilisateur, mdpHashe, (erreur, resultatMDP) => {
                 if (erreur) {
                     reject(erreur);
                 }
-                resolve(resultatMDP)
+                resolve(resultatMDP.rows)
             })
             
         });
@@ -167,14 +167,14 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
  */
 Utilisateur.updateCleAPI = (courriel_utilisateur, cleAPI) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE utilisateur SET cle_api = ? WHERE courriel = ?';
+        const update_requete = 'UPDATE utilisateur SET cle_api = $1 WHERE courriel = $1';
         const params_update = [cleAPI, courriel_utilisateur]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat);
+            resolve(update_resultat.rows);
         })
     }) 
 }
@@ -186,13 +186,13 @@ Utilisateur.updateCleAPI = (courriel_utilisateur, cleAPI) => {
  */
 Utilisateur.getDonnees = (courriel_utilisateur) => {
     return new Promise((resolve, reject) => {
-        const selectCle = 'SELECT cle_api FROM utilisateur WHERE courriel = ?';
+        const selectCle = 'SELECT cle_api FROM utilisateur WHERE courriel = $1';
 
         sql.query(selectCle, courriel_utilisateur, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat);
+            resolve(resultat.rows);
         })
     }) 
 }
@@ -204,7 +204,7 @@ Utilisateur.getDonnees = (courriel_utilisateur) => {
  */
 Utilisateur.validationCle = (cleAPI) => {
     return new Promise((resolve, reject) => {
-        const requeteValidation = 'SELECT COUNT(*) AS nbUsager FROM utilisateur u WHERE cle_api = ?;';
+        const requeteValidation = 'SELECT COUNT(*) AS nbUsager FROM utilisateur u WHERE cle_api = $1';
         const parametres = [cleAPI];
 
         sql.query(requeteValidation, parametres, (erreur, resultat) => {
@@ -212,8 +212,7 @@ Utilisateur.validationCle = (cleAPI) => {
                 console.log(`Erreur sqlState ${erreur.sqlState} : ${erreur.sqlMessage}`);
                 reject(erreur);
             }
-            console.log(resultat[0].nbUsager);
-            if (resultat[0].nbUsager <= 0) {
+            if (resultat.rows[0].nbUsager <= 0) {
                 resolve(false);
             }
             else {
