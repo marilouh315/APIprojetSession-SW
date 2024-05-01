@@ -151,7 +151,7 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
             } 
             const mdpHashe = result.rows[0].password;
             console.log("mot de passe hashe", mdpHashe);
-
+            console.log("mot de passe utilisateur", motDePasse_utilisateur);
             bcrypt.compare(motDePasse_utilisateur, mdpHashe)
             .then(res => {
                 if (res) {
@@ -162,15 +162,13 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
             })
             .catch(erreur => {
                 console.log('Erreur : ', erreur);
-                res.status(500).json
-                res.send({
+                res.status(500).json({
                     erreur: `Erreur serveur`,
                     message: `Erreur lors de la comparaison des mots de passe.`
                 });
-            })            
+            });           
         });
     })
-
 }
 
 /**
