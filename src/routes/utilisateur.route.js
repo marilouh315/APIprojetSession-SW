@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 // À ajuster selon la structure
 const utilisateurController = require('../controllers/utilisateur.controller');
-const { logger } = require('../middlewares/erreur_log');
-
-router.use(logger);
 
 // Créer nouveau utilisateur
 router.post('/', utilisateurController.creerUtilisateur);

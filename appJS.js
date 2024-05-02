@@ -21,12 +21,6 @@ const app = express();
 app.use(express.json())
 
 /**
- * MORGAN
- */
-const morgan = require('morgan')
-app.use(morgan('dev')); // format prédifini, voir dans la doc
-
-/**
  * Documentation.json
  */
 const swaggerUi = require('swagger-ui-express');
@@ -37,6 +31,21 @@ const swaggerOptions = {
     customCss: '.swagger-ui .topbar { display: none }',
     customSiteTitle: "Projet de session API | Service Web"
 };
+
+/**
+ * MORGAN
+ */
+const fs = require('fs');
+const path = require('path');
+const morgan = require('morgan');
+const erreurLogStream = fs.createWriteStream(path.join(__dirname, '../', 'error.log'), { flags: 'a' });
+app.use(morgan('combined', { stream: erreurLogStream, skip: (req, res) => res.statusCode < 500 }));
+
+
+
+
+
+
 
 //Routes pour la documentation.json
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
