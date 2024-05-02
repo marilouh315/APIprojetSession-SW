@@ -1322,11 +1322,6 @@
             "Parametre_body_modifier_statut_soustache" : {
                 "type": "object",
                 "properties": {
-                    "id_tache": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "description": "ID de la tâche à laquelle la sous-tâche est reliée."
-                    },
                     "complete_sous_tache": {
                         "type": "boolean",
                         "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
@@ -1337,7 +1332,7 @@
                         "description": "ID de la sous-tâche à modifier."
                     }
                 },
-                "required": ["id_tache", "complete_sous_tache", "id_sous_tache"]
+                "required": ["complete_sous_tache", "id_sous_tache"]
             },
             "Parametre_body_modifier_soustache" : {
                 "type": "object",
