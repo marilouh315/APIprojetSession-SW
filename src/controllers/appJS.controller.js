@@ -183,9 +183,9 @@ exports.ajouterTache = (req, res) => {
     if (!description) champsManquants.push("description");
     if (!date_debut) champsManquants.push("date_debut");
     if (!date_echeance) champsManquants.push("date_echeance");
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
-    }
+    } 
     if (champsManquants.length > 0) {
         return res.status(400).json({
             erreur: `Donnée(s) non valide(s).`,
@@ -276,9 +276,9 @@ exports.modifierStatutTache = (req, res) => {
     } = req.body;
     const champsManquants = [];
 
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
-    }
+    } 
     if (!id_tache) champsManquants.push("id_tache");
 
     if (champsManquants.length > 0) {
@@ -389,7 +389,7 @@ exports.modifierAuCompletTache = (req, res) => {
     if (!description) champsManquants.push("description");
     if (!date_debut) champsManquants.push("date_debut");
     if (!date_echeance) champsManquants.push("date_echeance");
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
     } 
     if (!id_tache) champsManquants.push("id_tache");
@@ -661,9 +661,9 @@ exports.ajouterSousTache = (req, res) => {
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!id_tache) champsManquants.push("id_tache");
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
-    }
+    } 
     if (champsManquants.length > 0) {
         return res.status(400).json({
             erreur: `Donnée(s) non valide(s).`,
@@ -751,9 +751,9 @@ exports.modifierStatutSousTache = (req, res) => {
     } = req.body;
     const champsManquants = [];
 
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
-    }
+    } 
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
 
@@ -879,9 +879,9 @@ exports.modifierAuCompletSousTache = (req, res) => {
 
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+    if (complete_tache === undefined || complete_tache === null) {
         champsManquants.push("complete_tache");
-    }
+    } 
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
 
