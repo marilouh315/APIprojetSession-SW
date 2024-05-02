@@ -20,9 +20,10 @@ Utilisateur.verifierCourrielUnique = (courriel) => {
             if (err) {
                 reject(err);
             }
-            console.log(parseInt(result.rows[0].count));
-            const resultat_courriel = parseInt(result.rows[0].count);
-            resolve(resultat_courriel === 0);
+            else {
+                const resultat_courriel = parseInt(result.rows[0].count);
+                resolve(resultat_courriel === 0);
+            }
         })
     })
 }
@@ -178,8 +179,9 @@ Utilisateur.updateCleAPI = (courriel_utilisateur, cleAPI) => {
             if (erreur) {
                 reject(erreur);
             }
-            console.log("updateCleAPI: ", update_resultat.rows);
-            resolve(update_resultat.rows);
+            else {
+                resolve(update_resultat.rows);
+            }
         })
     }) 
 }
@@ -197,7 +199,9 @@ Utilisateur.getDonnees = (courriel_utilisateur) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     }) 
 }

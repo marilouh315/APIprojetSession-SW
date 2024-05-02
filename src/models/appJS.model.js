@@ -15,7 +15,9 @@ Taches.verifierExistenceID = (id_tache) => {
                 reject(err);
                 return;
             }
-            resolve(resultats.rows[0].nbre_id > 0);
+            else {
+                resolve(resultats.rows[0].nbre_id > 0);
+            }
         });
     });
 }
@@ -33,7 +35,9 @@ Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
                 reject(err);
                 return;
             }
-            resolve(resultats.rows[0].nbre_id > 0);
+            else {
+                resolve(resultats.rows[0].nbre_id > 0);
+            }
         });
     });
 }
@@ -65,7 +69,9 @@ Taches.afficherTachesParDefaut = () => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else{
+                resolve(resultat.rows);
+            }
         })
     })
     
@@ -86,7 +92,9 @@ Taches.afficherDetailTache = (id_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     })
 }
@@ -105,7 +113,9 @@ Taches.afficherSousTaches = (id_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     })
 }
@@ -123,7 +133,9 @@ Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
                 reject(err);
                 return;
             }
-            resolve(resultats.rows[0].nbre_id > 0);
+            else {
+                resolve(resultats.rows[0].nbre_id > 0);
+            }
         });
     });
 }
@@ -148,7 +160,9 @@ Taches.ajouterTache = (
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     }) 
 }
@@ -180,7 +194,9 @@ Taches.modifierAuCompletTache = (
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat.rows);
+            else {
+                resolve(update_resultat.rows);
+            }
         })
     }) 
 
@@ -201,7 +217,9 @@ Taches.modifierStatutTache = (complete_tache, id_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat.rows);
+            else {
+                resolve(update_resultat.rows);
+            }
         })
     }) 
 }
@@ -229,8 +247,10 @@ Taches.supprimerTache = (id_tache) => {
                         reject(err);
                         return;
                     }
-
-                    resolve({ tache: deleteTacheResult1.rows, sous_taches: [] });
+                    else {
+                        resolve({ tache: deleteTacheResult1.rows, sous_taches: [] });
+                    }
+                    
                 });
             }
             else {
@@ -250,8 +270,9 @@ Taches.supprimerTache = (id_tache) => {
                             reject(err);
                             return;
                         }
-
-                        resolve({ tache: deleteTacheResult2.rows, sous_taches: deleteSousTachesResult.rows });
+                        else {
+                            resolve({ tache: deleteTacheResult2.rows, sous_taches: deleteSousTachesResult.rows });
+                        }
                     });
                 });
             }
@@ -278,7 +299,9 @@ Taches.ajouterSousTache = (id_tache, titre_sous_tache, complete_sous_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     }) 
 }
@@ -298,7 +321,9 @@ Taches.modifierStatutSousTache = (complete_sous_tache, id_sous_tache) => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat.rows);
+            else {
+                resolve(update_resultat.rows);
+            }
         })
     }) 
 }
@@ -320,7 +345,9 @@ Taches.modifierAuCompletSousTache = (id_tache, titre_sous_tache, complete_sous_t
             if (erreur) {
                 reject(erreur);
             }
-            resolve(update_resultat.rows);
+            else {
+                resolve(update_resultat.rows);
+            }
         })
     }) 
 }
