@@ -150,6 +150,7 @@ Utilisateur.verifierChampsCorrespondent = (courriel_utilisateur, motDePasse_util
             const mdpStocke = result.rows[0].password;
 
             if (bcrypt.getRounds(mdpStocke) > 0) {
+                console.log(bcrypt.getRounds(mdpStocke));
                 // Le mot de passe est déjà haché, comparer les hachages
                 bcrypt.compare(motDePasse_utilisateur, mdpStocke)
                 .then(res => {
