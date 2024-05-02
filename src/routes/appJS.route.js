@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const appJSController = require('../controllers/appJS.controller');
 const authentification = require('../middlewares/authentification');
+const { logger } = require('../middlewares/erreur_log');
+
+router.use(logger);
 
 // Afficher toutes les tâches (incomplètes ou toutes)
 router.get('/all', authentification, appJSController.afficherToutesTaches);

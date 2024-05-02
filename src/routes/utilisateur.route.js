@@ -3,6 +3,8 @@ const router = express.Router();
 // À ajuster selon la structure
 const utilisateurController = require('../controllers/utilisateur.controller');
 
+router.use(logger);
+
 // Créer nouveau utilisateur
 router.post('/', utilisateurController.creerUtilisateur);
 
