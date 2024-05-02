@@ -183,10 +183,7 @@ exports.ajouterTache = (req, res) => {
     if (!description) champsManquants.push("description");
     if (!date_debut) champsManquants.push("date_debut");
     if (!date_echeance) champsManquants.push("date_echeance");
-    if (complete_tache === undefined) {
-        champsManquants.push("complete_tache");
-    } else if (complete_tache !== 0 && !complete_tache) {
-        // Si complete_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
         champsManquants.push("complete_tache");
     }
     if (champsManquants.length > 0) {
@@ -279,10 +276,7 @@ exports.modifierStatutTache = (req, res) => {
     } = req.body;
     const champsManquants = [];
 
-    if (complete_tache === undefined) {
-        champsManquants.push("complete_tache");
-    } else if (complete_tache !== 0 && !complete_tache) {
-        // Si complete_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
         champsManquants.push("complete_tache");
     }
     if (!id_tache) champsManquants.push("id_tache");
@@ -395,12 +389,9 @@ exports.modifierAuCompletTache = (req, res) => {
     if (!description) champsManquants.push("description");
     if (!date_debut) champsManquants.push("date_debut");
     if (!date_echeance) champsManquants.push("date_echeance");
-    if (complete_tache === undefined) {
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
         champsManquants.push("complete_tache");
-    } else if (complete_tache !== 0 && !complete_tache) {
-        // Si complete_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
-        champsManquants.push("complete_tache");
-    }
+    } 
     if (!id_tache) champsManquants.push("id_tache");
 
     if (champsManquants.length > 0) {
@@ -668,11 +659,8 @@ exports.ajouterSousTache = (req, res) => {
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!id_tache) champsManquants.push("id_tache");
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_sous_tache === undefined) {
-        champsManquants.push("complete_sous_tache");
-    } else if (complete_sous_tache !== 0 && !complete_sous_tache) {
-        // Si complete_sous_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
-        champsManquants.push("complete_sous_tache");
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+        champsManquants.push("complete_tache");
     }
     if (champsManquants.length > 0) {
         return res.status(400).json({
@@ -761,11 +749,8 @@ exports.modifierStatutSousTache = (req, res) => {
     } = req.body;
     const champsManquants = [];
 
-    if (complete_sous_tache === undefined) {
-        champsManquants.push("complete_sous_tache");
-    } else if (complete_sous_tache !== 0 && !complete_sous_tache) {
-        // Si complete_sous_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
-        champsManquants.push("complete_sous_tache");
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+        champsManquants.push("complete_tache");
     }
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
@@ -892,11 +877,8 @@ exports.modifierAuCompletSousTache = (req, res) => {
 
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_sous_tache === undefined) {
-        champsManquants.push("complete_sous_tache");
-    } else if (complete_sous_tache !== 0 && !complete_sous_tache) {
-        // Si complete_sous_tache est autre que 0 et est falsy (ex: undefined, null, ""), on l'ajoute aux champs manquants
-        champsManquants.push("complete_sous_tache");
+    if (complete_tache === undefined || complete_tache === null || complete_tache === "" || !complete_tache) {
+        champsManquants.push("complete_tache");
     }
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");

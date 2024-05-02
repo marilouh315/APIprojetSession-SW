@@ -380,14 +380,15 @@ Taches.validerAuthorization = (id_tache, cleApi) => {
  */
 Taches.validerAuthorizationSousTaches = (id_sous_tache, cleApi) => {
     return new Promise((resolve, reject) => {
-        const requeteValidation = 'SELECT COUNT(*) AS nbTache FROM utilisateur u INNER JOIN taches t ON u.id = t.utilisateur_id INNER JOIN sous_tache st ON t.id = st.tache_id WHERE st.id = $1 AND u.cle_api = $2';
+        const requeteValidation = 'SELECT COUNT(*) AS nbtache FROM utilisateur u INNER JOIN taches t ON u.id = t.utilisateur_id INNER JOIN sous_tache st ON t.id = st.tache_id WHERE st.id = $1 AND u.cle_api = $2';
         const parametres = [id_sous_tache, cleApi];
 
         sql.query(requeteValidation, parametres, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
-            if (resultat.rows[0].nbTache <= 0) {
+            const nbSousTache = parseInt(resultat.rows[0].nbtache);
+            if (nbSousTache <= 0) {
                 resolve(false);
             }
             else {

@@ -1082,7 +1082,7 @@
                     },
                     "complete": {
                         "type": "boolean",
-                        "example": "0"
+                        "example": "false"
                     }
 
                 }
@@ -1118,7 +1118,7 @@
                                 },
                                 "complete_sous_tache": {
                                     "type": "boolean",
-                                    "example": "1"
+                                    "example": "true"
                                 }
                             }
                         }
@@ -1155,8 +1155,8 @@
                         "example": "2022-03-23"
                     },
                     "complete": {
-                        "type": "tinyint",
-                        "example": "0"
+                        "type": "boolean",
+                        "example": "false"
                     }
                 }
             },
@@ -1185,10 +1185,8 @@
                         "description": "La date d'échéance de la tâche."
                     },
                     "complete_tache": {
-                        "type": "tinyint",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     }
                 },
                 "required": ["utilisateur_id", "titre_tache", "description", "date_debut", "date_echeance", "complete_tache"]
@@ -1202,10 +1200,8 @@
                         "description": "ID de la tâche à modifier."
                     },
                     "complete_tache": {
-                        "type": "int",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     }
                 },
                 "required": ["id_tache", "complete_tache"]
@@ -1235,10 +1231,8 @@
                         "description": "La date d'échéance de la tâche."
                     },
                     "complete_tache": {
-                        "type": "tinyint",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     },
                     "id_tache": {
                         "type": "integer",
@@ -1278,8 +1272,8 @@
                         "example": "2022-03-23"
                     },
                     "complete": {
-                        "type": "tinyint",
-                        "example": "0"
+                        "type": "boolean",
+                        "example": "false"
                     }
                 }
             },
@@ -1296,10 +1290,8 @@
                         "description": "Titre de la sous-tâche."
                     },
                     "complete_sous_tache": {
-                        "type": "tinyint",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     }
                 },
                 "required": ["id_tache", "titre_sous_tache", "complete_sous_tache"]
@@ -1322,8 +1314,8 @@
                         "example": "Nouvelle sous-tâche"
                     },
                     "complete_sous_tache": {
-                        "type": "tinyint",
-                        "example": "0"
+                        "type": "boolean",
+                        "example": "false"
                     }
                 }
             },
@@ -1336,10 +1328,8 @@
                         "description": "ID de la tâche à laquelle la sous-tâche est reliée."
                     },
                     "complete_sous_tache": {
-                        "type": "int",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     },
                     "id_sous_tache": {
                         "type": "integer",
@@ -1362,10 +1352,8 @@
                         "description": "Titre de la sous-tâche."
                     },
                     "complete_sous_tache": {
-                        "type": "tinyint",
-                        "minimum": 0,
-                        "maximum": 1,
-                        "description": "Un booléan pour indiquer l'état de la sous-tâche (complète 1 ou incomplète 0)."
+                        "type": "boolean",
+                        "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     },
                     "id_sous_tache": {
                         "type": "integer",
@@ -1388,8 +1376,8 @@
                         "example": "Nouvelle sous-tâche modifiée"
                     },
                     "complete_sous_tache": {
-                        "type": "tinyint",
-                        "example": "0"
+                        "type": "boolean",
+                        "example": "false"
                     }
                 }
             },
