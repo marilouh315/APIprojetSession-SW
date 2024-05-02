@@ -48,7 +48,9 @@ Taches.afficherToutesTaches = () => {
             if (erreur) {
                 reject(erreur);
             }
-            resolve(resultat.rows);
+            else {
+                resolve(resultat.rows);
+            }
         })
     })
     
