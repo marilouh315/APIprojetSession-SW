@@ -77,7 +77,7 @@ exports.afficherDetailTache = (req, res) => {
     const id_tache = parseInt(req.params.id_tache);
 
     // Teste si le paramètre id est présent et valide
-    if(!id_tache || parseInt(id_tache) < 0){
+    if(!id_tache || id_tache === undefined || id_tache === null || isNaN(id_tache) || id_tache <= 0){
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
@@ -446,53 +446,48 @@ exports.modifierAuCompletTache = (req, res) => {
                             });
                         } 
                         else {
-                            return res.status(200).json({
-                                message: 'ayay'
+                            appJSModel.modifierAuCompletTache(
+                                utilisateur_id,
+                                titre_tache,
+                                description,
+                                date_debut,
+                                date_echeance,
+                                complete_tache,
+                                id_tache
+                            )
+                            .then((resultat_update) => {
+                                if (!resultat_update) {
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Erreur de modification.`,
+                                        message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
+                                    });
+                                    return;
+                                }
+                                else {
+                                    res.status(200).json({
+                                        message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
+                                        tache_modifiee: {
+                                            id_tache,
+                                            utilisateur_id,
+                                            titre_tache,
+                                            description,
+                                            date_debut,
+                                            date_echeance,
+                                            complete_tache
+                                        }
+                                    });
+                                }
+                            })
+                            .catch(erreur => {
+                                console.log('Erreur : ', erreur);
+                                res.status(500).json
+                                res.send({
+                                    erreur: `Erreur serveur`,
+                                    message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
+                                });
                             });
                         }
-                        // else {
-                        //     appJSModel.modifierAuCompletTache(
-                        //         utilisateur_id,
-                        //         titre_tache,
-                        //         description,
-                        //         date_debut,
-                        //         date_echeance,
-                        //         complete_tache,
-                        //         id_tache
-                        //     )
-                        //     .then((resultat_update) => {
-                        //         if (!resultat_update) {
-                        //             res.status(404).json;
-                        //             res.send({
-                        //                 erreur: `Erreur de modification.`,
-                        //                 message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
-                        //             });
-                        //             return;
-                        //         }
-                        //         else {
-                        //             res.status(200).json({
-                        //                 message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
-                        //                 tache_modifiee: {
-                        //                     id_tache,
-                        //                     utilisateur_id,
-                        //                     titre_tache,
-                        //                     description,
-                        //                     date_debut,
-                        //                     date_echeance,
-                        //                     complete_tache
-                        //                 }
-                        //             });
-                        //         }
-                        //     })
-                        //     .catch(erreur => {
-                        //         console.log('Erreur : ', erreur);
-                        //         res.status(500).json
-                        //         res.send({
-                        //             erreur: `Erreur serveur`,
-                        //             message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
-                        //         });
-                        //     });
-                        // }
                     })
                     .catch(erreur => {
                         console.log('Erreur : ', erreur);
@@ -661,8 +656,8 @@ exports.ajouterSousTache = (req, res) => {
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!id_tache) champsManquants.push("id_tache");
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_tache === undefined || complete_tache === null) {
-        champsManquants.push("complete_tache");
+    if (complete_sous_tache === undefined || complete_sous_tache === null) {
+        champsManquants.push("complete_sous_tache");
     } 
     if (champsManquants.length > 0) {
         return res.status(400).json({
@@ -672,11 +667,11 @@ exports.ajouterSousTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== false && complete_tache !== true) {
+    if (complete_sous_tache !== false && complete_sous_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
+            message: `Le champ 'complete_sous_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -751,8 +746,8 @@ exports.modifierStatutSousTache = (req, res) => {
     } = req.body;
     const champsManquants = [];
 
-    if (complete_tache === undefined || complete_tache === null) {
-        champsManquants.push("complete_tache");
+    if (complete_sous_tache === undefined || complete_sous_tache === null) {
+        champsManquants.push("complete_sous_tache");
     } 
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
@@ -765,11 +760,11 @@ exports.modifierStatutSousTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== false && complete_tache !== true) {
+    if (complete_sous_tache !== false && complete_sous_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
+            message: `Le champ 'complete_sous_tache' est un booléean, seulement true or false.`
         });
         return;
     }
@@ -879,8 +874,8 @@ exports.modifierAuCompletSousTache = (req, res) => {
 
     // Vérification de chaque champ et ajout à champsManquants s'il est manquant
     if (!titre_sous_tache) champsManquants.push("titre_sous_tache");
-    if (complete_tache === undefined || complete_tache === null) {
-        champsManquants.push("complete_tache");
+    if (complete_sous_tache === undefined || complete_sous_tache === null) {
+        champsManquants.push("complete_sous_tache");
     } 
     if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
@@ -893,11 +888,11 @@ exports.modifierAuCompletSousTache = (req, res) => {
         });
     }
 
-    if (complete_tache !== false && complete_tache !== true) {
+    if (complete_sous_tache !== false && complete_sous_tache !== true) {
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: `Le champ 'complete_tache' est un booléean, seulement true or false.`
+            message: `Le champ 'complete_sous_tache' est un booléean, seulement true or false.`
         });
         return;
     }
