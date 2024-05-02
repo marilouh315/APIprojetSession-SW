@@ -453,48 +453,53 @@ exports.modifierAuCompletTache = (req, res) => {
                             });
                         } 
                         else {
-                            appJSModel.modifierAuCompletTache(
-                                utilisateur_id,
-                                titre_tache,
-                                description,
-                                date_debut,
-                                date_echeance,
-                                complete_tache,
-                                id_tache
-                            )
-                            .then((resultat_update) => {
-                                if (!resultat_update) {
-                                    res.status(404).json;
-                                    res.send({
-                                        erreur: `Erreur de modification.`,
-                                        message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
-                                    });
-                                    return;
-                                }
-                                else {
-                                    res.status(200).json({
-                                        message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
-                                        tache_modifiee: {
-                                            id_tache,
-                                            utilisateur_id,
-                                            titre_tache,
-                                            description,
-                                            date_debut,
-                                            date_echeance,
-                                            complete_tache
-                                        }
-                                    });
-                                }
-                            })
-                            .catch(erreur => {
-                                console.log('Erreur : ', erreur);
-                                res.status(500).json
-                                res.send({
-                                    erreur: `Erreur serveur`,
-                                    message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
-                                });
+                            return res.status(200).json({
+                                message: 'ayay'
                             });
                         }
+                        // else {
+                        //     appJSModel.modifierAuCompletTache(
+                        //         utilisateur_id,
+                        //         titre_tache,
+                        //         description,
+                        //         date_debut,
+                        //         date_echeance,
+                        //         complete_tache,
+                        //         id_tache
+                        //     )
+                        //     .then((resultat_update) => {
+                        //         if (!resultat_update) {
+                        //             res.status(404).json;
+                        //             res.send({
+                        //                 erreur: `Erreur de modification.`,
+                        //                 message: `La tache n'a pas pu être modifiée. Un problème est survenu.`
+                        //             });
+                        //             return;
+                        //         }
+                        //         else {
+                        //             res.status(200).json({
+                        //                 message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
+                        //                 tache_modifiee: {
+                        //                     id_tache,
+                        //                     utilisateur_id,
+                        //                     titre_tache,
+                        //                     description,
+                        //                     date_debut,
+                        //                     date_echeance,
+                        //                     complete_tache
+                        //                 }
+                        //             });
+                        //         }
+                        //     })
+                        //     .catch(erreur => {
+                        //         console.log('Erreur : ', erreur);
+                        //         res.status(500).json
+                        //         res.send({
+                        //             erreur: `Erreur serveur`,
+                        //             message: `Erreur lors de la mise à jour de la tâche avec l'ID ${id_tache}.`
+                        //         });
+                        //     });
+                        // }
                     })
                     .catch(erreur => {
                         console.log('Erreur : ', erreur);

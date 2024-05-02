@@ -361,7 +361,8 @@ Taches.validerAuthorization = (id_tache, cleApi) => {
             if (erreur) {
                 reject(erreur);
             }
-            if (resultat.rows[0].nbTache <= 0) {
+            const nbTache = parseInt(resultat.rows[0].nbtache);
+            if (nbTache <= 0) {
                 resolve(false);
             }
             else {
