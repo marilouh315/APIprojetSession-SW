@@ -746,7 +746,7 @@ exports.modifierStatutSousTache = (req, res) => {
     if (complete_sous_tache === undefined || complete_sous_tache === null) {
         champsManquants.push("complete_sous_tache");
     } 
-    if (!id_tache || id_tache === undefined || id_tache === null || isNaN(id_tache) || id_tache <= 0) champsManquants.push("id_sous_tache");
+    if (!id_sous_tache || id_sous_tache === undefined || id_sous_tache === null || isNaN(id_sous_tache) || id_sous_tache <= 0) champsManquants.push("id_sous_tache");
 
     if (champsManquants.length > 0) {
         return res.status(400).json({
