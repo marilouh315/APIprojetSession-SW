@@ -764,7 +764,7 @@ exports.modifierStatutSousTache = (req, res) => {
         });
         return;
     }
-    
+
     appJSModel.verifierExistenceIdSousTache(id_sous_tache)
     .then((idExiste) => {
         if (idExiste == false) {
@@ -884,25 +884,25 @@ exports.modifierAuCompletSousTache = (req, res) => {
             return;
         }
         else {
-            const cleApi = req.headers.authorization;
-            appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
-            .then((cleValide) => {
-                if (!cleValide) {
-                    return res.status(403).json({
-                        erreur: `Accès refusé.`,
-                        message: `Vous n'êtes pas autorisé à modifier cette sous-tâche. Clé API invalide ou manquante.`
+            appJSModel.verifierExistenceIdSousTache(id_sous_tache)
+            .then((idExiste) => {
+                if (idExiste == false) {
+                    res.status(400).json;
+                    res.send({
+                        erreur: `Erreur des données.`,
+                        message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
                     });
+                    return;
                 }
                 else {
-                    appJSModel.verifierExistenceIdSousTache(id_sous_tache)
-                    .then((idExiste) => {
-                        if (idExiste == false) {
-                            res.status(400).json;
-                            res.send({
-                                erreur: `Erreur des données.`,
-                                message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
+                    const cleApi = req.headers.authorization;
+                    appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
+                    .then((cleValide) => {
+                        if (!cleValide) {
+                            return res.status(403).json({
+                                erreur: `Accès refusé.`,
+                                message: `Vous n'êtes pas autorisé à modifier cette sous-tâche. Clé API invalide ou manquante.`
                             });
-                            return;
                         }
                         else {
                             appJSModel.modifierAuCompletSousTache(
@@ -946,7 +946,7 @@ exports.modifierAuCompletSousTache = (req, res) => {
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                            message: `Erreur lors de la validation de la clé API.`
                         });
                     });
                 }
@@ -956,7 +956,7 @@ exports.modifierAuCompletSousTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la validation de la clé API.`
+                    message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
                 });
             });
         }
@@ -969,8 +969,6 @@ exports.modifierAuCompletSousTache = (req, res) => {
             message: `Erreur lors de la vérification de l'existence du ID de la tâche dans la bd.`
         });
     });
-
-    
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
