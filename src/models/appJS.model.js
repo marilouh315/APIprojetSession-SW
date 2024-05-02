@@ -284,14 +284,13 @@ Taches.ajouterSousTache = (id_tache, titre_sous_tache, complete_sous_tache) => {
 /**
  * Modifier le statut d'une sous-tâche
  * @param {Le statut d'une sous-tâche (complétée ou pas)} complete_sous_tache 
- * @param {Le id d'une tâche} id_tache 
  * @param {Le id d'une sous-tâche} id_sous_tache
  * @returns 
  */
-Taches.modifierStatutSousTache = (complete_sous_tache, id_tache, id_sous_tache) => {
+Taches.modifierStatutSousTache = (complete_sous_tache, id_sous_tache) => {
     return new Promise((resolve, reject) => {
         const update_requete = 'UPDATE sous_tache SET complete = $1 WHERE id = $2';
-        const params_update = [complete_sous_tache, id_tache, id_sous_tache]
+        const params_update = [complete_sous_tache, id_sous_tache]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {

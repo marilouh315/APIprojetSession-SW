@@ -698,11 +698,9 @@ exports.ajouterSousTache = (req, res) => {
                     return;
                 }
                 else {
-                    const last_insertID = sous_tache_ajoute.insertId; // Récupérer l'ID de la tâche nouvellement ajoutée
                     res.status(200).json({
-                        message: `La sous-tâche : ${titre_sous_tache} (ID: ${last_insertID}) a été ajoutée avec succès!`,
+                        message: `La sous-tâche : (${titre_sous_tache}) a été ajoutée avec succès!`,
                         sous_tache_ajoutee: {
-                            last_insertID,
                             id_tache,
                             titre_sous_tache,
                             complete_sous_tache
@@ -740,7 +738,6 @@ exports.ajouterSousTache = (req, res) => {
  */
 exports.modifierStatutSousTache = (req, res) => {
     const {
-        id_tache,
         complete_sous_tache,
         id_sous_tache
     } = req.body;
@@ -749,7 +746,6 @@ exports.modifierStatutSousTache = (req, res) => {
     if (complete_sous_tache === undefined || complete_sous_tache === null) {
         champsManquants.push("complete_sous_tache");
     } 
-    if (!id_tache) champsManquants.push("id_tache");
     if (!id_sous_tache) champsManquants.push("id_sous_tache");
 
     if (champsManquants.length > 0) {
@@ -769,61 +765,40 @@ exports.modifierStatutSousTache = (req, res) => {
         return;
     }
 
-    appJSModel.verifierExistenceID(id_tache)
-    .then((idExiste) => {
-        if (idExiste == false) {
-            res.status(400).json;
-            res.send({
-                erreur: `Erreur des données.`,
-                message: `Le id de la tâche ${id_tache} n'existe pas dans la base de donnée.`
+    const cleApi = req.headers.authorization;
+    appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
+    .then((cleValide) => {
+        if (!cleValide) {
+            return res.status(403).json({
+                erreur: `Accès refusé.`,
+                message: `Vous n'êtes pas autorisé à modifier le statut de cette sous-tâche. Clé API invalide ou manquante.`
             });
-            return;
         }
         else {
-            const cleApi = req.headers.authorization;
-            appJSModel.validerAuthorizationSousTaches(id_sous_tache, cleApi)
-            .then((cleValide) => {
-                if (!cleValide) {
-                    return res.status(403).json({
-                        erreur: `Accès refusé.`,
-                        message: `Vous n'êtes pas autorisé à modifier le statut de cette sous-tâche. Clé API invalide ou manquante.`
+            appJSModel.verifierExistenceIdSousTache(id_sous_tache)
+            .then((idExiste) => {
+                if (idExiste == false) {
+                    res.status(400).json;
+                    res.send({
+                        erreur: `Erreur des données.`,
+                        message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
                     });
+                    return;
                 }
                 else {
-                    appJSModel.verifierExistenceIdSousTache(id_sous_tache)
-                    .then((idExiste) => {
-                        if (idExiste == false) {
-                            res.status(400).json;
+                    appJSModel.modifierStatutSousTache(complete_sous_tache, id_sous_tache)
+                    .then((resultat_modif_statut) => {
+                        if (!resultat_modif_statut) {
+                            res.status(404).json;
                             res.send({
-                                erreur: `Erreur des données.`,
-                                message: `Le id de la sous-tâche ${id_sous_tache} n'existe pas dans la base de donnée.`
+                                erreur: `Erreur de modification.`,
+                                message: `Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu.`
                             });
                             return;
                         }
                         else {
-                            appJSModel.modifierStatutSousTache(complete_sous_tache, id_tache, id_sous_tache)
-                            .then((resultat_modif_statut) => {
-                                if (!resultat_modif_statut) {
-                                    res.status(404).json;
-                                    res.send({
-                                        erreur: `Erreur de modification.`,
-                                        message: `Le statut de la sous-tâche n'a pas pu être modifié. Un problème est survenu.`
-                                    });
-                                    return;
-                                }
-                                else {
-                                    res.status(200).json({
-                                        message: `Le statut de la sous-tâche, avec l'id ${id_sous_tache}, a été modifié avec succès. Nouveau statut : ${complete_sous_tache}.`
-                                    });
-                                }
-                            })
-                            .catch(erreur => {
-                                console.log('Erreur : ', erreur);
-                                res.status(500).json
-                                res.send({
-                                    erreur: `Erreur serveur`,
-                                    message: `Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID ${id_sous_tache}.`
-                                });
+                            res.status(200).json({
+                                message: `Le statut de la sous-tâche, avec l'id ${id_sous_tache}, a été modifié avec succès. Nouveau statut : ${complete_sous_tache}.`
                             });
                         }
                     })
@@ -832,7 +807,7 @@ exports.modifierStatutSousTache = (req, res) => {
                         res.status(500).json
                         res.send({
                             erreur: `Erreur serveur`,
-                            message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
+                            message: `Erreur lors de la mise à jour du statut de la sous-tâche avec l'ID ${id_sous_tache}.`
                         });
                     });
                 }
@@ -842,7 +817,7 @@ exports.modifierStatutSousTache = (req, res) => {
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la validation de la clé API.`
+                    message: `Erreur lors de la vérification de l'existence du ID de la sous-tâche dans la bd.`
                 });
             });
         }
@@ -852,7 +827,7 @@ exports.modifierStatutSousTache = (req, res) => {
         res.status(500).json
         res.send({
             erreur: `Erreur serveur`,
-            message: `Erreur lors de la vérification de l'existence du ID de la tâche dans la bd.`
+            message: `Erreur lors de la validation de la clé API.`
         });
     });
     
