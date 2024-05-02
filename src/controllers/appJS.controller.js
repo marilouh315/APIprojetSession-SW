@@ -402,6 +402,8 @@ exports.modifierAuCompletTache = (req, res) => {
         });
     }
 
+    console.log('complete_tache : ', complete_tache);
+    return;
     if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
         res.send({
