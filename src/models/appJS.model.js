@@ -218,21 +218,22 @@ Taches.supprimerTache = (id_tache) => {
                 reject(err);
                 return;
             }
-            if (sousTaches.length === 0) {
+            console.log("sous-taches : ", sousTaches.rows);
+            if (sousTaches.rows.length === 0) {
                 // Aucune sous-tâche associée, supprimer directement la tâche principale
                 const deleteTacheQuery = 'DELETE FROM taches WHERE id = $1';
-                sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
+                sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult1) => {
                     if (err) {
                         reject(err);
                         return;
                     }
 
-                    resolve({ tache: deleteTacheResult.rows, sous_taches: [] });
+                    resolve({ tache: deleteTacheResult1.rows, sous_taches: [] });
                 });
             }
             else {
                 // Supprimer les sous-tâches associées
-                const sousTacheIds = sousTaches.map(sousTache => sousTache.id);
+                const sousTacheIds = sousTaches.rows.map(sousTache => sousTache.id);
                 const deleteSousTachesQuery = 'DELETE FROM sous_tache WHERE tache_id IN ($1)';
                 sql.query(deleteSousTachesQuery, [sousTacheIds], (err, deleteSousTachesResult) => {
                     if (err) {
@@ -242,13 +243,13 @@ Taches.supprimerTache = (id_tache) => {
 
                     // Supprimer la tâche principale
                     const deleteTacheQuery = 'DELETE FROM taches WHERE id = $1';
-                    sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult) => {
+                    sql.query(deleteTacheQuery, [id_tache], (err, deleteTacheResult2) => {
                         if (err) {
                             reject(err);
                             return;
                         }
 
-                        resolve({ tache: deleteTacheResult.rows, sous_taches: deleteSousTachesResult.rows });
+                        resolve({ tache: deleteTacheResult2.rows, sous_taches: deleteSousTachesResult.rows });
                     });
                 });
             }
