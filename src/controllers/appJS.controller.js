@@ -395,14 +395,14 @@ exports.modifierAuCompletTache = (req, res) => {
     if (!id_tache) champsManquants.push("id_tache");
 
     if (champsManquants.length > 0) {
+        console.log('complete_tache : ', complete_tache);
+
         return res.status(400).json({
             erreur: `Donnée(s) non valide(s).`,
             message: `Le format des données est invalide. Tous les champs sont obligatoires.`,
             champs_manquants: champsManquants
         });
     }
-
-    console.log('complete_tache : ', complete_tache);
     
     if (complete_tache !== false && complete_tache !== true) {
         res.status(400).json;
