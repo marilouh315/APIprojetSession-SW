@@ -535,7 +535,7 @@ exports.supprimerTache = (req, res) => {
     const id_tache = parseInt(req.params.id_tache);
 
     // Teste si le paramètre id est présent et valide
-    if(!id_tache || parseInt(id_tache) < 0){
+    if(!id_tache || parseInt(id_tache) < 0 || id_tache === undefined || id_tache === null){
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
