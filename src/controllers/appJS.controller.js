@@ -535,11 +535,11 @@ exports.supprimerTache = (req, res) => {
     const id_tache = parseInt(req.params.id_tache);
 
     // Teste si le paramètre id est présent et valide
-    if(!id_tache || parseInt(id_tache) < 0 || id_tache === undefined || id_tache === null){
+    if(!id_tache || id_tache === undefined || id_tache === null || isNaN(id_tache) || id_tache <= 0){
         res.status(400).json;
         res.send({
             erreur: `Erreur des données.`,
-            message: "L'id de la tâche est obligatoire et doit être supérieur à 0.",
+            message: "L'id de la tâche est manquant ou invalide",
             champs_manquants: ["id_tache"]
         });
         return;
