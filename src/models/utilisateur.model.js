@@ -237,7 +237,7 @@ Utilisateur.validationCle = (cleAPI) => {
  */
 Utilisateur.afficherTousUtilisateurs = () => {
     return new Promise((resolve, reject) => {
-        const requete = 'SELECT id FROM utilisateur';
+        const requete = 'SELECT id, nom FROM utilisateur';
         sql.query(requete, (err, result) => {
             if (err) {
                 reject(err);
