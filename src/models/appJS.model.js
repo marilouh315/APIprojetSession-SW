@@ -47,7 +47,7 @@ Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
  */
 Taches.afficherToutesTaches = () => {
     return new Promise((resolve, reject) => {
-        const requete = `SELEC t.id, t.titre, t.complete FROM taches t`;
+        const requete = `SELECT t.id, t.titre, t.complete FROM taches t`;
         sql.query(requete, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
