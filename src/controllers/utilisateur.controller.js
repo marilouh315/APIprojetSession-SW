@@ -285,3 +285,38 @@ exports.afficherUtilisateur = (req, res) => {
         });
     });
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////  
+/**
+ * Affiche tous les utilisateurs
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.afficherTousUtilisateurs = (req, res) => {
+    utilisateurs.afficherTousUtilisateurs()
+    .then(resultat_utilisateurs => {
+        if (!resultat_utilisateurs) {
+            res.status(404).json;
+            res.send({
+                erreur: `Donnée(s) non trouvée(s).`,
+                message: `Les données sont introuvables pour les utilisateurs.`
+            });
+            return;
+        }
+        else {
+            res.status(200).json({
+                message: `Voici les utilisateurs : `,
+                utilisateurs: resultat_utilisateurs
+            });
+        }
+    })
+    .catch(erreur => {
+        console.log('Erreur : ', erreur);
+        res.status(500).json
+        res.send({
+            erreur: `Erreur serveur`,
+            message: `Erreur lors de la récupération des données.`
+        });
+    });
+}

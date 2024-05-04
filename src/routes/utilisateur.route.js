@@ -12,6 +12,9 @@ router.put('/', utilisateurController.recevoirNouvCleAPI);
 //Afficher les données de l'utilisateur avec le courriel
 router.get('/', utilisateurController.afficherUtilisateur)
 
+//Afficher tous les utilisateurs
+router.get('/all', utilisateurController.afficherTousUtilisateurs)
+
 module.exports = router;
 
 
