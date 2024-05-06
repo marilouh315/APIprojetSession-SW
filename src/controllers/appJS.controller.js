@@ -103,7 +103,7 @@ exports.afficherDetailTache = (req, res) => {
                 if (!cleValide) {
                     return res.status(403).json({
                         erreur: `Accès refusé.`,
-                        message: `Vous n'êtes pas autorisé à modifier le statut de cette tâche. Clé API invalide ou manquante.`
+                        message: `Vous n'êtes pas autorisé à visionner cette tâche. Clé API invalide ou manquante.`
                     });
                 } 
                 else {
@@ -367,7 +367,6 @@ exports.modifierStatutTache = (req, res) => {
  * @returns 
  */
 exports.modifierAuCompletTache = (req, res) => {
-    const cle_api = req.headers.authorization;
     const {
         titre_tache,
         description,
@@ -429,7 +428,6 @@ exports.modifierAuCompletTache = (req, res) => {
                 } 
                 else {
                     appJSModel.modifierAuCompletTache(
-                        cleApi,
                         titre_tache,
                         description,
                         date_debut,
@@ -451,7 +449,6 @@ exports.modifierAuCompletTache = (req, res) => {
                                 message: `La tâche avec l'ID ${id_tache} a été mise à jour avec succès`,
                                 tache_modifiee: {
                                     id_tache,
-                                    utilisateur_id,
                                     titre_tache,
                                     description,
                                     date_debut,

@@ -1128,11 +1128,6 @@
             "Reponse_ajout_tache" : {
                 "type": "object",
                 "properties" : {
-                    "utilisateur_id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "1"
-                    },
                     "titre_tache": {
                         "type": "string",
                         "example": "Nouvelle tâche"
@@ -1199,11 +1194,6 @@
             "Parametre_body_modifier_tache_complete" : {
                 "type": "object",
                 "properties": {
-                    "utilisateur_id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "description": "ID de l'utilisateur."
-                    },
                     "titre_tache": {
                         "type": "string",
                         "description": "Titre de la tâche."
@@ -1230,7 +1220,7 @@
                         "description": "ID de la tâche à modifier."
                     }
                 },
-                "required": ["utilisateur_id", "titre_tache", "description", "date_debut", "date_echeance", "complete_tache", "id_tache"]
+                "required": ["titre_tache", "description", "date_debut", "date_echeance", "complete_tache", "id_tache"]
             },
             "Reponse_modif_tache_complete" : {
                 "type": "object",
@@ -1239,11 +1229,6 @@
                         "type": "integer",
                         "minimum": 1,
                         "example": "10"
-                    },
-                    "utilisateur_id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "1"
                     },
                     "titre_tache": {
                         "type": "string",

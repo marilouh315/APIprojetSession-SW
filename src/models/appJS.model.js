@@ -202,8 +202,8 @@ Taches.modifierAuCompletTache = async (
     const utilisateur_id = await Taches.obtenirIDUtilisateur(cle_api);
 
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7 AND utilisateur_id = $8';
-        const params_update = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache, id_tache, utilisateur_id]
+        const update_requete = 'UPDATE taches SET titre = $1, description = $2, date_debut = $3, date_echeance = $4, complete = $5 WHERE id = $6 AND utilisateur_id = $7';
+        const params_update = [titre_tache, description, date_debut, date_echeance, complete_tache, id_tache, utilisateur_id]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
