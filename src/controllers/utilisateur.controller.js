@@ -76,7 +76,7 @@ exports.creerUtilisateur = (req, res) => {
                         }
                         res.status(200).json({
                             message: `L'utilisateur ${nom_utilisateur} a été ajouté avec succès.`,
-                            tache_ajoutee: {
+                            utilisateur_ajoute: {
                                 lastID: resultat_utilisateur.insertId,
                                 nom_utilisateur,
                                 courriel_utilisateur,
