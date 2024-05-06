@@ -49,8 +49,6 @@ const cors = require('cors');
 app.use(cors());
 
 
-
-
 //Routes pour la documentation.json
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 

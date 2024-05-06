@@ -218,7 +218,6 @@ exports.ajouterTache = (req, res) => {
             res.status(200).json({
                 message: `La tâche : ${titre_tache} a été ajoutée avec succès!`,
                 tache_ajoutee: {
-                    utilisateur_id,
                     titre_tache,
                     description,
                     date_debut,
