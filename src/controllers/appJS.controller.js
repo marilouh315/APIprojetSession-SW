@@ -428,6 +428,7 @@ exports.modifierAuCompletTache = (req, res) => {
                 } 
                 else {
                     appJSModel.modifierAuCompletTache(
+                        cleApi,
                         titre_tache,
                         description,
                         date_debut,
