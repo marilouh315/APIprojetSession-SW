@@ -51,7 +51,7 @@ Taches.obtenirIDUtilisateur = (cleApi) => {
     return new Promise((resolve, reject) => {
         let requete = "SELECT utilisateur_id FROM utilisateur WHERE cle_api = $1";
         let params = [cleApi];
-        postgres.query(requete, params, (erreur, resultats) => {
+        sql.query(requete, params, (erreur, resultats) => {
             if (erreur) {
                 console.log(erreur);
                 reject(erreur);
