@@ -66,8 +66,8 @@ Taches.obtenirIDUtilisateur = (cleApi) => {
  * Affiche toutes les tâches 
  * @param {La clé d'API de l'utilisateur} cleAPI
  */
-Taches.afficherToutesTaches = (cleAPI) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
+Taches.afficherToutesTaches = async (cleAPI) => {
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cleAPI);
 
     return new Promise((resolve, reject) => {
         const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE utilisateur_id = $1`;

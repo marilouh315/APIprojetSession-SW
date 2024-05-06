@@ -1128,11 +1128,6 @@
             "Reponse_ajout_tache" : {
                 "type": "object",
                 "properties" : {
-                    "last_insertID": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "10"
-                    },
                     "utilisateur_id": {
                         "type": "integer",
                         "minimum": 1,
