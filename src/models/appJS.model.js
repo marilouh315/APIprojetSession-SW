@@ -87,8 +87,8 @@ Taches.afficherToutesTaches = async (cleAPI) => {
  * Affiche toutes les tâches par défaut (incomplètes) 
  * @param {La clé d'API de l'utilisateur} cleAPI
  */
-Taches.afficherTachesParDefaut = (cleAPI) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
+Taches.afficherTachesParDefaut = async (cleAPI) => {
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cleAPI);
 
     return new Promise((resolve, reject) => {
         const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = false AND utilisateur_id = $1`;
@@ -111,8 +111,8 @@ Taches.afficherTachesParDefaut = (cleAPI) => {
  * @param {La clé d'API de l'utilisateur} cle_api
  * @returns Boolean (vrai s'il existe ou non)
  */
-Taches.afficherDetailTache = (id_tache, cle_api) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+Taches.afficherDetailTache = async (id_tache, cle_api) => {
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cle_api);
 
     return new Promise((resolve, reject) => {
         const requete = `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = $1 AND t.utilisateur_id = $2`;
@@ -160,10 +160,10 @@ Taches.afficherSousTaches = (id_tache) => {
  * @param {Le statut de la tâche (complété ou pas)} complete_tache 
  * @returns 
  */
-Taches.ajouterTache = (
+Taches.ajouterTache = async (
     cle_api, titre_tache, description, date_debut, date_echeance, complete_tache
 ) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cle_api);
 
     return new Promise((resolve, reject) => {
         const requete = `INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete) VALUES ($1, $2, $3, $4, $5, $6)`;
@@ -190,7 +190,7 @@ Taches.ajouterTache = (
  * @param {Le statut de la tâche (complété ou pas)} complete_tache 
  * @param {Le id d'une tâche} id_tache
 */
-Taches.modifierAuCompletTache = (
+Taches.modifierAuCompletTache = async (
     cle_api,
     titre_tache,
     description,
@@ -199,7 +199,7 @@ Taches.modifierAuCompletTache = (
     complete_tache,
     id_tache
 ) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cle_api);
 
     return new Promise((resolve, reject) => {
         const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7 AND utilisateur_id = $8';
@@ -224,8 +224,8 @@ Taches.modifierAuCompletTache = (
  * @param {La clé d'API de l'utilisateur} cle_api
  * @returns 
  */
-Taches.modifierStatutTache = (complete_tache, id_tache, cle_api) => {
-    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+Taches.modifierStatutTache = async (complete_tache, id_tache, cle_api) => {
+    const utilisateur_id = await Taches.obtenirIDUtilisateur(cle_api);
 
     return new Promise((resolve, reject) => {
         const update_requete = 'UPDATE taches SET complete = $1 WHERE id = $2 AND utilisateur_id = $3';
