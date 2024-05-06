@@ -41,8 +41,12 @@ const morgan = require('morgan');
 const erreurLogStream = fs.createWriteStream(path.join(__dirname, '../', 'error.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: erreurLogStream, skip: (req, res) => res.statusCode < 500 }));
 
-
-
+/**
+ * CORS
+ */
+const cors = require('cors');
+// Déclaration des middlewares
+app.use(cors());
 
 
 
