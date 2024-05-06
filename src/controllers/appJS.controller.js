@@ -97,57 +97,77 @@ exports.afficherDetailTache = (req, res) => {
             return;
         }
         else {
-            appJSModel.afficherDetailTache(id_tache, cleApi)
-            .then((tache_resultat) => {
-                if (!tache_resultat) {
-                    res.status(404).json;
-                    res.send({
-                        erreur: `Donnée(s) non trouvée(s).`,
-                        message: `La tâche est introuvable avec l'id ${id_tache}.`
+            const cleApi = req.headers.authorization;
+            appJSModel.validerAuthorization(id_tache, cleApi)
+            .then((cleValide) => {
+                if (!cleValide) {
+                    return res.status(403).json({
+                        erreur: `Accès refusé.`,
+                        message: `Vous n'êtes pas autorisé à modifier le statut de cette tâche. Clé API invalide ou manquante.`
                     });
-                    return;
-                }
+                } 
                 else {
-                    appJSModel.afficherSousTaches(id_tache)
-                    .then((sous_tache_resultat) => {
-                        if (sous_tache_resultat){
-                            // Ajouter le tableau de sous-tâches aux détails de la tâche
-                            tache_resultat[0].sous_taches = sous_tache_resultat;
-                            // Envoyer la réponse JSON avec les détails de la tâche et ses sous-tâches
-                            res.status(200).json({
-                                result: {
-                                    taches: tache_resultat
-                                }
-                            });
-                        }
-                        else {
+                    appJSModel.afficherDetailTache(id_tache, cleApi)
+                    .then((tache_resultat) => {
+                        if (!tache_resultat) {
                             res.status(404).json;
                             res.send({
                                 erreur: `Donnée(s) non trouvée(s).`,
-                                message: `Aucunes données trouvées avec l'id ${id_tache}.`
+                                message: `La tâche est introuvable avec l'id ${id_tache}.`
                             });
                             return;
                         }
+                        else {
+                            appJSModel.afficherSousTaches(id_tache)
+                            .then((sous_tache_resultat) => {
+                                if (sous_tache_resultat){
+                                    // Ajouter le tableau de sous-tâches aux détails de la tâche
+                                    tache_resultat[0].sous_taches = sous_tache_resultat;
+                                    // Envoyer la réponse JSON avec les détails de la tâche et ses sous-tâches
+                                    res.status(200).json({
+                                        result: {
+                                            taches: tache_resultat
+                                        }
+                                    });
+                                }
+                                else {
+                                    res.status(404).json;
+                                    res.send({
+                                        erreur: `Donnée(s) non trouvée(s).`,
+                                        message: `Aucunes données trouvées avec l'id ${id_tache}.`
+                                    });
+                                    return;
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Erreur :", err);
+                                res.status(500).json({
+                                    erreur: "Erreur serveur",
+                                    message: "Une erreur s'est produite lors de la récupération des sous-tâches."
+                                });
+                            });
+                        }
                     })
-                    .catch(err => {
-                        console.error("Erreur :", err);
-                        res.status(500).json({
-                            erreur: "Erreur serveur",
-                            message: "Une erreur s'est produite lors de la récupération des sous-tâches."
+                    // S'il y a eu une erreur au niveau de la requête, on retourne un erreur 500 car c'est du serveur que provient l'erreur.
+                    .catch((erreur) => {
+                        console.log('Erreur : ', erreur);
+                        res.status(500).json
+                        res.send({
+                            erreur: `Erreur serveur`,
+                            message: `Erreur lors de la récupération de la tâche.`
                         });
                     });
                 }
             })
-            // S'il y a eu une erreur au niveau de la requête, on retourne un erreur 500 car c'est du serveur que provient l'erreur.
-            .catch((erreur) => {
+            .catch(erreur => {
                 console.log('Erreur : ', erreur);
                 res.status(500).json
                 res.send({
                     erreur: `Erreur serveur`,
-                    message: `Erreur lors de la récupération de la tâche.`
+                    message: `Erreur lors de la validation de la clé API.`
                 });
             });
-        }//else
+        }
     })
     .catch(erreur => {
         console.log('Erreur : ', erreur);
