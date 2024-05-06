@@ -41,14 +41,37 @@ Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
         });
     });
 }
+
+/**
+ * Obtenir l'ID de l'utilisateur avec la clé API
+ * @param {La clé d'API} cleApi 
+ * @returns 
+ */
+Taches.obtenirIDUtilisateur = (cleApi) => {
+    return new Promise((resolve, reject) => {
+        let requete = "SELECT utilisateur_id FROM utilisateur WHERE cle_api = $1";
+        let params = [cleApi];
+        postgres.query(requete, params, (erreur, resultats) => {
+            if (erreur) {
+                console.log(erreur);
+                reject(erreur);
+            } else {
+                resolve(resultats.rows[0].utilisateur_id);
+            }
+        });
+    });
+}
 ///////////////////////////////////////////////////////////////////////////////////
 /**
  * Affiche toutes les tâches 
+ * @param {La clé d'API de l'utilisateur} cleAPI
  */
-Taches.afficherToutesTaches = () => {
+Taches.afficherToutesTaches = (cleAPI) => {
     return new Promise((resolve, reject) => {
-        const requete = `SELECT t.id, t.titre, t.complete FROM taches t`;
-        sql.query(requete, (erreur, resultat) => {
+        const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
+        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE utilisateur_id = $1`;
+        const params = [utilisateur_id];
+        sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
@@ -61,11 +84,15 @@ Taches.afficherToutesTaches = () => {
 }
 /**
  * Affiche toutes les tâches par défaut (incomplètes) 
+ * @param {La clé d'API de l'utilisateur} cleAPI
  */
-Taches.afficherTachesParDefaut = () => {
+Taches.afficherTachesParDefaut = (cleAPI) => {
+
     return new Promise((resolve, reject) => {
-        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = false`;
-        sql.query(requete, (erreur, resultat) => {
+        const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
+        const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = false AND utilisateur_id = $1`;
+        const params = [utilisateur_id];
+        sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
                 reject(erreur);
             }
@@ -80,13 +107,14 @@ Taches.afficherTachesParDefaut = () => {
 /**
  * Affiche le détail d'une tâche (et de ses sous-tâches, s'il y a lieu)
  * @param {Le id d'une tâche (pas une sous-tâche)} id_tache 
+ * @param {La clé d'API de l'utilisateur} cle_api
  * @returns Boolean (vrai s'il existe ou non)
  */
-Taches.afficherDetailTache = (id_tache) => {
+Taches.afficherDetailTache = (id_tache, cle_api) => {
     return new Promise((resolve, reject) => {
-        const requete = 
-        `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = $1`;
-        const params = [id_tache];
+        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+        const requete = `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = $1 AND t.utilisateur_id = $2`;
+        const params = [id_tache, utilisateur_id];
 
         sql.query(requete, params, (erreur, resultat) => {
             if (erreur) {
@@ -105,8 +133,7 @@ Taches.afficherDetailTache = (id_tache) => {
  */
 Taches.afficherSousTaches = (id_tache) => {
     return new Promise((resolve, reject) => {
-        const requete = 
-        `SELECT st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = $1`;
+        const requete = `SELECT st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = $1`;
         const params = [id_tache];
 
         sql.query(requete, params, (erreur, resultat) => {
@@ -141,7 +168,7 @@ Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
 }
 /**
  * Ajoute une tâche
- * @param {Le id d'un utilisateur} utilisateur_id 
+ * @param {La clé d'API de l'utilisateur} cle_api
  * @param {Le titre d'une tâche} titre_tache 
  * @param {La description donnée à une tâche} description 
  * @param {La date de début de la tâche} date_debut 
@@ -150,9 +177,10 @@ Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
  * @returns 
  */
 Taches.ajouterTache = (
-    utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache
+    cle_api, titre_tache, description, date_debut, date_echeance, complete_tache
 ) => {
     return new Promise((resolve, reject) => {
+        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
         const requete = `INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete) VALUES ($1, $2, $3, $4, $5, $6)`;
         const params = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache]
 
@@ -169,7 +197,7 @@ Taches.ajouterTache = (
 //////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Modifier une tâche (au complet)
- * @param {Le id d'un utilisateur} utilisateur_id 
+ * @param {La clé d'API de l'utilisateur} cle_api
  * @param {Le titre d'une tâche} titre_tache 
  * @param {La description donnée à une tâche} description 
  * @param {La date de début de la tâche} date_debut 
@@ -178,7 +206,7 @@ Taches.ajouterTache = (
  * @param {Le id d'une tâche} id_tache
 */
 Taches.modifierAuCompletTache = (
-    utilisateur_id,
+    cle_api,
     titre_tache,
     description,
     date_debut,
@@ -187,8 +215,9 @@ Taches.modifierAuCompletTache = (
     id_tache
 ) => {
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7';
-        const params_update = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache, id_tache]
+        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+        const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7 AND utilisateur_id = $8';
+        const params_update = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache, id_tache, utilisateur_id]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {
@@ -206,12 +235,14 @@ Taches.modifierAuCompletTache = (
  * Modifier le statut d'une tâche
  * @param {Le statut d'une tâche (complétée ou pas)} complete_tache 
  * @param {Le id d'une tâche} id_tache 
+ * @param {La clé d'API de l'utilisateur} cle_api
  * @returns 
  */
-Taches.modifierStatutTache = (complete_tache, id_tache) => {
+Taches.modifierStatutTache = (complete_tache, id_tache, cle_api) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
     return new Promise((resolve, reject) => {
-        const update_requete = 'UPDATE taches SET complete = $1 WHERE id = $2';
-        const params_update = [complete_tache, id_tache]
+        const update_requete = 'UPDATE taches SET complete = $1 WHERE id = $2 AND utilisateur_id = $3';
+        const params_update = [complete_tache, id_tache, utilisateur_id]
 
         sql.query(update_requete, params_update, (erreur, update_resultat) => {
             if (erreur) {

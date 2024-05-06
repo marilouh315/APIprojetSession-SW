@@ -1163,11 +1163,6 @@
             "Parametre_body_ajouter_tache" : {
                 "type": "object",
                 "properties": {
-                    "utilisateur_id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "description": "ID de l'utilisateur."
-                    },
                     "titre_tache": {
                         "type": "string",
                         "description": "Titre de la tâche."
@@ -1189,7 +1184,7 @@
                         "description": "Un booléan pour indiquer l'état de la tâche (complète: true ou incomplète: false)."
                     }
                 },
-                "required": ["utilisateur_id", "titre_tache", "description", "date_debut", "date_echeance", "complete_tache"]
+                "required": ["titre_tache", "description", "date_debut", "date_echeance", "complete_tache"]
             },
             "Parametre_body_modifier_statut_tache" : {
                 "type": "object",
