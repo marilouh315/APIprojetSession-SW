@@ -67,8 +67,9 @@ Taches.obtenirIDUtilisateur = (cleApi) => {
  * @param {La clé d'API de l'utilisateur} cleAPI
  */
 Taches.afficherToutesTaches = (cleAPI) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
+
     return new Promise((resolve, reject) => {
-        const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
         const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE utilisateur_id = $1`;
         const params = [utilisateur_id];
         sql.query(requete, params, (erreur, resultat) => {
@@ -87,9 +88,9 @@ Taches.afficherToutesTaches = (cleAPI) => {
  * @param {La clé d'API de l'utilisateur} cleAPI
  */
 Taches.afficherTachesParDefaut = (cleAPI) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
 
     return new Promise((resolve, reject) => {
-        const utilisateur_id = Taches.obtenirIDUtilisateur(cleAPI);
         const requete = `SELECT t.id, t.titre, t.complete FROM taches t WHERE complete = false AND utilisateur_id = $1`;
         const params = [utilisateur_id];
         sql.query(requete, params, (erreur, resultat) => {
@@ -111,8 +112,9 @@ Taches.afficherTachesParDefaut = (cleAPI) => {
  * @returns Boolean (vrai s'il existe ou non)
  */
 Taches.afficherDetailTache = (id_tache, cle_api) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+
     return new Promise((resolve, reject) => {
-        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
         const requete = `SELECT t.titre AS tache_titre, t.description, t.date_debut, t.date_echeance FROM taches t WHERE t.id = $1 AND t.utilisateur_id = $2`;
         const params = [id_tache, utilisateur_id];
 
@@ -147,25 +149,7 @@ Taches.afficherSousTaches = (id_tache) => {
     })
 }
 ///////////////////////////////////////////////////////////////////////////////////
-/**
- * Vérifie si le id de l'utilisateur passé, existe
- * @param {Le id d'un utilisateur} utilisateur_id 
- * @returns 
- */
-Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
-    return new Promise((resolve, reject) => {
-        const requete = "SELECT COUNT(*) AS nbre_id FROM utilisateur WHERE id = $1";
-        sql.query(requete, [utilisateur_id], (err, resultats) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            else {
-                resolve(resultats.rows[0].nbre_id > 0);
-            }
-        });
-    });
-}
+
 /**
  * Ajoute une tâche
  * @param {La clé d'API de l'utilisateur} cle_api
@@ -179,8 +163,9 @@ Taches.verifierExistenceIdUtilisateur = (utilisateur_id) => {
 Taches.ajouterTache = (
     cle_api, titre_tache, description, date_debut, date_echeance, complete_tache
 ) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+
     return new Promise((resolve, reject) => {
-        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
         const requete = `INSERT INTO taches (utilisateur_id, titre, description, date_debut, date_echeance, complete) VALUES ($1, $2, $3, $4, $5, $6)`;
         const params = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache]
 
@@ -214,8 +199,9 @@ Taches.modifierAuCompletTache = (
     complete_tache,
     id_tache
 ) => {
+    const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+
     return new Promise((resolve, reject) => {
-        const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
         const update_requete = 'UPDATE taches SET utilisateur_id = $1, titre = $2, description = $3, date_debut = $4, date_echeance = $5, complete = $6 WHERE id = $7 AND utilisateur_id = $8';
         const params_update = [utilisateur_id, titre_tache, description, date_debut, date_echeance, complete_tache, id_tache, utilisateur_id]
 
@@ -240,6 +226,7 @@ Taches.modifierAuCompletTache = (
  */
 Taches.modifierStatutTache = (complete_tache, id_tache, cle_api) => {
     const utilisateur_id = Taches.obtenirIDUtilisateur(cle_api);
+
     return new Promise((resolve, reject) => {
         const update_requete = 'UPDATE taches SET complete = $1 WHERE id = $2 AND utilisateur_id = $3';
         const params_update = [complete_tache, id_tache, utilisateur_id]
