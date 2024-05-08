@@ -381,7 +381,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Le statut de la tâche a été modifié avec succès!"
+                        "message": "Le statut de la tâche, avec l'id 3, a été modifié avec succès. Nouveau statut : false."
                     },
                     "400": {
                         "description": "Format des données invalides ou manquantes.",
@@ -464,7 +464,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                        "message": "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
                     },
                     "400": {
                         "description": "ID de tâche invalide ou inexistant.",
@@ -708,7 +708,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Le statut de la sous-tâche a été modifié avec succès!"
+                        "message": "Le statut de la sous-tâche, avec l'id 11, a été modifié avec succès. Nouveau statut : false."
                     },
                     "400": {
                         "description": "Format des données invalides ou manquantes.",
@@ -791,7 +791,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "La sous-tâche a été supprimée avec succès!"
+                        "description": "La sous-tâche avec l'ID 11 a été supprimé avec succès"
                     },
                     "400": {
                         "description": "ID de sous-tâche invalide ou inexistant.",
@@ -988,74 +988,6 @@
                         }
                     }
                 }
-            },
-            "get": {
-                "description": "Affiche la clé d'API d'un utilisateur spécifique",
-                "summary": "Afficher la clé API",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Parametre_body_afficher_cleAPI"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "La clé API a été affichée avec succès!",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Reponse_afficher_cleAPI"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Mauvais champs (courriel ou mot de passe) invalides.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Erreur400"
-                                },
-                                "example": {
-                                    "erreur": "Erreur des données.",
-                                    "message": "Mauvais courriel ou mot de passe. Les champs passés en paramètre ne correspondent pas."
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "La clé API n'a pas pu être affichée.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Erreur404"
-                                },
-                                "example": {
-                                    "erreur": "Donnée(s) non trouvée(s).",
-                                    "message": "Les données sont introuvables pour l'utilisateur avec le courriel passé."
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Erreur serveur : lors de l'affichage de la clé API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Erreur500"
-                                },
-                                "example": {
-                                    "erreur": "Erreur serveur.",
-                                    "message": "Erreur lors de la récupération des données."
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
     },
@@ -1098,38 +1030,48 @@
             "Reponse_detail_tache" : {
                 "type": "object",
                 "properties" : {
-                    "titre": {
-                        "type": "string",
-                        "example": "Tache 3"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Description 3e tache"
-                    },
-                    "date_creation": {
-                        "type": "date",
-                        "example": "2023-12-12T05:00:00.000Z"
-                    },
-                    "date_echeance": {
-                        "type": "date",
-                        "example": "2024-02-23T05:00:00.000Z"
-                    },
-                    "sous_taches": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "id_sous_tache": {
-                                    "type": "integer",
-                                    "example": "1"
-                                },
-                                "titre_sous_tache": {
-                                    "type": "string",
-                                    "example": "Sous tache complete (Tache 3)"
-                                },
-                                "complete_sous_tache": {
-                                    "type": "boolean",
-                                    "example": "true"
+                    "result": {
+                        "taches": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string",
+                                        "example": "Tache 3"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Description 3e tache"
+                                    },
+                                    "date_creation": {
+                                        "type": "date",
+                                        "example": "2023-12-12T05:00:00.000Z"
+                                    },
+                                    "date_echeance": {
+                                        "type": "date",
+                                        "example": "2024-02-23T05:00:00.000Z"
+                                    },
+                                    "sous_taches": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id_sous_tache": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "titre_sous_tache": {
+                                                    "type": "string",
+                                                    "example": "Sous tache complete (Tache 3)"
+                                                },
+                                                "complete_sous_tache": {
+                                                    "type": "boolean",
+                                                    "example": "true"
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1139,28 +1081,37 @@
             "Reponse_ajout_tache" : {
                 "type": "object",
                 "properties" : {
-                    "titre_tache": {
+                    "message": {
                         "type": "string",
-                        "example": "Nouvelle tâche"
+                        "example": "La tâche : Acheter du lait a été ajoutée avec succès!"
                     },
-                    "description": {
-                        "type": "string",
-                        "example": "Description test"
-                    },
-                    "date_debut": {
-                        "type": "date",
-                        "example": "2022-03-23"
-                    },
-                    "date_echeance": {
-                        "type": "date",
-                        "example": "2022-03-23"
-                    },
-                    "complete": {
-                        "type": "boolean",
-                        "example": "false"
+                    "tache_ajoutee": {
+                        "type": "object",
+                        "properties": {
+                            "titre_tache": {
+                                "type": "string",
+                                "example": "Acheter du lait"
+                            },
+                            "description": {
+                                "type": "string",
+                                "example": "test2"
+                            },
+                            "date_debut": {
+                                "type": "string",
+                                "example": "2023-03-04"
+                            },
+                            "date_echeance": {
+                                "type": "string",
+                                "example": "2024-02-02"
+                            },
+                            "complete_tache": {
+                                "type": "boolean",
+                                "example": "true"
+                            }
+                        }
                     }
                 }
-            },
+            }, 
             "Parametre_body_ajouter_tache" : {
                 "type": "object",
                 "properties": {
@@ -1236,31 +1187,39 @@
             "Reponse_modif_tache_complete" : {
                 "type": "object",
                 "properties" : {
-                    "id_tache": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "10"
-                    },
-                    "titre_tache": {
+                    "message": {
                         "type": "string",
-                        "example": "Nouvelle tâche"
+                        "example": "La tâche avec l'ID 3 a été mise à jour avec succès."
                     },
-                    "description": {
-                        "type": "string",
-                        "example": "Description test"
-                    },
-                    "date_debut": {
-                        "type": "date",
-                        "example": "2022-03-23"
-                    },
-                    "date_echeance": {
-                        "type": "date",
-                        "example": "2022-03-23"
-                    },
-                    "complete": {
-                        "type": "boolean",
-                        "example": "false"
+                    "tache_modifiee": {
+                        "type": "object",
+                        "id_tache": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": "10"
+                        },
+                        "titre_tache": {
+                            "type": "string",
+                            "example": "Nouvelle tâche"
+                        },
+                        "description": {
+                            "type": "string",
+                            "example": "Description test"
+                        },
+                        "date_debut": {
+                            "type": "date",
+                            "example": "2022-03-23"
+                        },
+                        "date_echeance": {
+                            "type": "date",
+                            "example": "2022-03-23"
+                        },
+                        "complete": {
+                            "type": "boolean",
+                            "example": "false"
+                        }
                     }
+                    
                 }
             },
             "Parametre_body_ajouter_soustache" : {
@@ -1285,23 +1244,27 @@
             "Reponse_ajout_soustache" : {
                 "type": "object",
                 "properties" : {
-                    "last_insertID": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "10"
-                    },
-                    "id_tache": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "1"
-                    },
-                    "titre_sous_tache": {
+                    "message": {
                         "type": "string",
-                        "example": "Nouvelle sous-tâche"
+                        "example": "La sous-tâche : (Nouvelle sous-tâche) a été ajoutée avec succès!"
                     },
-                    "complete_sous_tache": {
-                        "type": "boolean",
-                        "example": "false"
+                    "sous_tache_ajoutee": {
+                        "type": "object",
+                        "properties": {
+                            "id_tache": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "example": "1"
+                            },
+                            "titre_sous_tache": {
+                                "type": "string",
+                                "example": "Nouvelle sous-tâche"
+                            },
+                            "complete_sous_tache": {
+                                "type": "boolean",
+                                "example": "false"
+                            }
+                        }
                     }
                 }
             },
@@ -1347,18 +1310,27 @@
             "Reponse_modif_soustache" : {
                 "type": "object",
                 "properties" : {
-                    "id_tache": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "1"
-                    },
-                    "titre_sous_tache": {
+                    "message": {
                         "type": "string",
-                        "example": "Nouvelle sous-tâche modifiée"
+                        "example": "La sous-tâche avec l'ID 3 a été mise à jour avec succès."
                     },
-                    "complete_sous_tache": {
-                        "type": "boolean",
-                        "example": "false"
+                    "sous_tache_modifiee": {
+                        "type": "object",
+                        "properties": {
+                            "id_tache": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "example": "3"
+                            },
+                            "titre_sous_tache": {
+                                "type": "string",
+                                "example": "Nouvelle sous-tâche modifiée"
+                            },
+                            "complete_sous_tache": {
+                                "type": "boolean",
+                                "example": "false"
+                            }
+                        }
                     }
                 }
             },
@@ -1383,26 +1355,30 @@
             "Reponse_ajout_utilisateur" : {
                 "type": "object",
                 "properties" : {
-                    "last_insertID": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "10"
-                    },
-                    "nom_utilisateur": {
+                    "message": {
                         "type": "string",
-                        "example": "Nom nouvel utilisateur"
+                        "example": "L'utilisateur NouvelUtilisateur a été ajouté avec succès."
                     },
-                    "courriel_utilisateur": {
-                        "type": "string",
-                        "exemple": "courriel@email.com" 
-                    },
-                    "motDePasse_utilisateur": {
-                        "type": "string",
-                        "example": "motdepasse123"
-                    },
-                    "cle_api": {
-                        "type": "string",
-                        "example": "123456789"
+                    "utilisateur_ajoute": {
+                        "type": "object",
+                        "properties": {
+                            "nom_utilisateur": {
+                                "type": "string",
+                                "example": "NouvelUtilisateur"
+                            },
+                            "courriel_utilisateur": {
+                                "type": "string",
+                                "exemple": "courriel@email.com" 
+                            },
+                            "motDePasse_utilisateur": {
+                                "type": "string",
+                                "example": "motdepasse123"
+                            },
+                            "cle_api": {
+                                "type": "string",
+                                "example": "123456789"
+                            }
+                        }
                     }
                 }
             },
@@ -1425,30 +1401,7 @@
                 "properties" : {
                     "message": {
                         "type": "string",
-                        "example": "Voici votre nouvelle clé API generée : 123456789"
-                    }
-                }
-            },
-            "Parametre_body_afficher_cleAPI" : {
-                "type": "object",
-                "properties": {
-                    "courriel_utilisateur": {
-                        "type": "string",
-                        "description": "Courriel de l'utilisateur."
-                    },
-                    "mot_de_passe": {
-                        "type": "string",
-                        "description": "Mot de passe de l'utilisateur."
-                    }
-                },
-                "required": ["courriel_utilisateur", "mot_de_passe"]
-            },
-            "Reponse_afficher_cleAPI" : {
-                "type": "object",
-                "properties" : {
-                    "cle_api": {
-                        "type": "string",
-                        "example": "Voici votre clé API : 987654321"
+                        "example": "Voici la nouvelle clé d'API générée : 12345678"
                     }
                 }
             },

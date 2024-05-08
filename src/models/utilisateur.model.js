@@ -183,25 +183,6 @@ Utilisateur.updateCleAPI = (courriel_utilisateur, cleAPI) => {
     }) 
 }
 
-/**
- * Recherche les données assignées au compte
- * @param {Le courriel de l'utilisateur} courriel_utilisateur 
- * @returns 
- */
-Utilisateur.getDonnees = (courriel_utilisateur) => {
-    return new Promise((resolve, reject) => {
-        const selectCle = 'SELECT cle_api FROM utilisateur WHERE courriel = $1';
-
-        sql.query(selectCle, [courriel_utilisateur], (erreur, resultat) => {
-            if (erreur) {
-                reject(erreur);
-            }
-            else {
-                resolve(resultat.rows);
-            }
-        })
-    }) 
-}
 
 /**
  * Vérifie si la clé API est valide
@@ -228,22 +209,7 @@ Utilisateur.validationCle = (cleAPI) => {
     })
 }
 
-/**
- * Affiche tous les utilisateurs
- * @returns 
- */
-Utilisateur.afficherTousUtilisateurs = () => {
-    return new Promise((resolve, reject) => {
-        const requete = 'SELECT id, nom FROM utilisateur';
-        sql.query(requete, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result.rows);
-            }
-        });
-    });
-}
+
 
 module.exports = Utilisateur;
 
