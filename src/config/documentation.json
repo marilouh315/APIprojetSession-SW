@@ -1071,20 +1071,21 @@
             "Reponse_taches" : {
                 "type": "object",
                 "properties" : {
-                    "id": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "example": "1"
-                    },
-                    "titre": {
-                        "type": "string",
-                        "example": "Tache en test"
-                    },
-                    "complete": {
-                        "type": "boolean",
-                        "example": "false"
-                    }
-
+                    "result":[{
+                        "id": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": "1"
+                        },
+                        "titre": {
+                            "type": "string",
+                            "example": "Tache en test"
+                        },
+                        "complete": {
+                            "type": "boolean",
+                            "example": "false"
+                        }
+                    }]
                 }
                 
             },
