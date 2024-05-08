@@ -62,7 +62,6 @@ exports.creerUtilisateur = (req, res) => {
                     return;
                 }
                 else {
-                    console.log(cleAPI); // Maintenant cleAPI est résolu et contient la clé API générée
                 
                     utilisateurs.creerUtilisateur(nom_utilisateur, courriel_utilisateur, motDePasse_utilisateur, cleAPI)
                     .then(resultat_utilisateur => {
@@ -160,7 +159,6 @@ exports.recevoirNouvCleAPI = (req, res) => {
                     return;
                 }
                 else {
-                    console.log(nouvelleCleAPI); // Maintenant cleAPI est résolu et contient la clé API générée
                 
                     utilisateurs.updateCleAPI(courriel_utilisateur, nouvelleCleAPI)
                     .then(resultat_update => {

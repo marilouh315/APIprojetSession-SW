@@ -49,7 +49,6 @@ Utilisateur.creerUtilisateur = (nom, courriel, motDePasse, cleAPI) => {
                 reject(err);
             } 
             else {
-                console.log(hash);
                 const params = [nom, courriel, hash, cleAPI];
                 sql.query(requeteInsertionUser, params, (err, result) => {
                     if (err) {
@@ -110,7 +109,6 @@ Utilisateur.verifierCleUnique = (cleAPI) => {
             } else {
                 // Résout avec un booléen indiquant si la clé est unique ou non
                 let nbreCleAPI = parseInt(result.rows[0].count);
-                console.log("verifierCleUnique", nbreCleAPI);
                 resolve(nbreCleAPI === 0);
             }
         });
@@ -128,7 +126,6 @@ Utilisateur.generateApiKey = (length) => {
     for (let i = 0; i < length; i++) {
         cle_API_generee += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    console.log(cle_API_generee);
     return cle_API_generee;
 }
 

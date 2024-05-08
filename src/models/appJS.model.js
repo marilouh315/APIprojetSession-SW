@@ -256,7 +256,6 @@ Taches.supprimerTache = (id_tache) => {
                 reject(err);
                 return;
             }
-            console.log("sous-taches : ", sousTaches.rows);
             if (sousTaches.rows.length === 0) {
                 // Aucune sous-tâche associée, supprimer directement la tâche principale
                 const deleteTacheQuery = 'DELETE FROM taches WHERE id = $1';

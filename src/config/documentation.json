@@ -1071,7 +1071,7 @@
             "Reponse_taches" : {
                 "type": "object",
                 "properties" : {
-                    "result":[{
+                    "result":{
                         "id": {
                             "type": "integer",
                             "minimum": 1,
@@ -1085,7 +1085,7 @@
                             "type": "boolean",
                             "example": "false"
                         }
-                    }]
+                    }
                 }
                 
             },
