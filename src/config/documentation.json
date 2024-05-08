@@ -1112,6 +1112,10 @@
                         "items": {
                             "type": "object",
                             "properties": {
+                                "id_sous_tache": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
                                 "titre_sous_tache": {
                                     "type": "string",
                                     "example": "Sous tache complete (Tache 3)"
