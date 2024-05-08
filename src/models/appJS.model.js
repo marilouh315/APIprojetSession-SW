@@ -135,7 +135,7 @@ Taches.afficherDetailTache = async (id_tache, cle_api) => {
  */
 Taches.afficherSousTaches = (id_tache) => {
     return new Promise((resolve, reject) => {
-        const requete = `SELECT st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = $1`;
+        const requete = `SELECT st.id AS id_sous_tache, st.titre AS titre_sous_tache, st.complete AS complete_sous_tache FROM sous_tache st WHERE st.tache_id = $1`;
         const params = [id_tache];
 
         sql.query(requete, params, (erreur, resultat) => {
