@@ -381,7 +381,10 @@
                 },
                 "responses": {
                     "200": {
-                        "message": "Le statut de la tâche, avec l'id 3, a été modifié avec succès. Nouveau statut : false."
+                        "message": {
+                            "type": "string",
+                            "example": "Le statut de la tâche, avec l'id 3, a été modifié avec succès. Nouveau statut : false."
+                        }
                     },
                     "400": {
                         "description": "Format des données invalides ou manquantes.",
@@ -464,7 +467,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "message": "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                        "message": {
+                            "type": "string",
+                            "example":  "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                        }
                     },
                     "400": {
                         "description": "ID de tâche invalide ou inexistant.",
@@ -708,7 +714,10 @@
                 },
                 "responses": {
                     "200": {
-                        "message": "Le statut de la sous-tâche, avec l'id 11, a été modifié avec succès. Nouveau statut : false."
+                        "message": {
+                            "type": "string",
+                            "example": "Le statut de la sous-tâche, avec l'id 11, a été modifié avec succès. Nouveau statut : false."
+                        }
                     },
                     "400": {
                         "description": "Format des données invalides ou manquantes.",
@@ -791,7 +800,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "La sous-tâche avec l'ID 11 a été supprimé avec succès"
+                        "message": {
+                            "type": "string",
+                            "example":  "La sous-tâche avec l'ID 11 a été supprimé avec succès"
+                        }
                     },
                     "400": {
                         "description": "ID de sous-tâche invalide ou inexistant.",
@@ -936,13 +948,9 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "La clé API a été générée avec succès!",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Reponse_generer_cleAPI"
-                                }
-                            }
+                        "message": {
+                            "type": "string",
+                            "example": "Voici la nouvelle clé d'API générée : 12345678"
                         }
                     },
                     "400": {
@@ -1031,43 +1039,46 @@
                 "type": "object",
                 "properties" : {
                     "result": {
-                        "taches": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "titre": {
-                                        "type": "string",
-                                        "example": "Tache 3"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Description 3e tache"
-                                    },
-                                    "date_creation": {
-                                        "type": "date",
-                                        "example": "2023-12-12T05:00:00.000Z"
-                                    },
-                                    "date_echeance": {
-                                        "type": "date",
-                                        "example": "2024-02-23T05:00:00.000Z"
-                                    },
-                                    "sous_taches": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id_sous_tache": {
-                                                    "type": "integer",
-                                                    "example": "1"
-                                                },
-                                                "titre_sous_tache": {
-                                                    "type": "string",
-                                                    "example": "Sous tache complete (Tache 3)"
-                                                },
-                                                "complete_sous_tache": {
-                                                    "type": "boolean",
-                                                    "example": "true"
+                        "type": "object",
+                        "properties": {
+                            "taches": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "titre": {
+                                            "type": "string",
+                                            "example": "Tache 3"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Description 3e tache"
+                                        },
+                                        "date_creation": {
+                                            "type": "date",
+                                            "example": "2023-12-12T05:00:00.000Z"
+                                        },
+                                        "date_echeance": {
+                                            "type": "date",
+                                            "example": "2024-02-23T05:00:00.000Z"
+                                        },
+                                        "sous_taches": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id_sous_tache": {
+                                                        "type": "integer",
+                                                        "example": "1"
+                                                    },
+                                                    "titre_sous_tache": {
+                                                        "type": "string",
+                                                        "example": "Sous tache complete (Tache 3)"
+                                                    },
+                                                    "complete_sous_tache": {
+                                                        "type": "boolean",
+                                                        "example": "true"
+                                                    }
                                                 }
                                             }
                                         }
@@ -1184,7 +1195,7 @@
                 },
                 "required": ["titre_tache", "description", "date_debut", "date_echeance", "complete_tache", "id_tache"]
             },
-            "Reponse_modif_tache_complete" : {
+            "Reponse_modif_tache_complete" : {  
                 "type": "object",
                 "properties" : {
                     "message": {
@@ -1193,30 +1204,32 @@
                     },
                     "tache_modifiee": {
                         "type": "object",
-                        "id_tache": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "example": "10"
-                        },
-                        "titre_tache": {
-                            "type": "string",
-                            "example": "Nouvelle tâche"
-                        },
-                        "description": {
-                            "type": "string",
-                            "example": "Description test"
-                        },
-                        "date_debut": {
-                            "type": "date",
-                            "example": "2022-03-23"
-                        },
-                        "date_echeance": {
-                            "type": "date",
-                            "example": "2022-03-23"
-                        },
-                        "complete": {
-                            "type": "boolean",
-                            "example": "false"
+                        "properties": {
+                            "id_tache": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "example": "3"
+                            },
+                            "titre_tache": {
+                                "type": "string",
+                                "example": "Nouvelle tâche modifiée"
+                            },
+                            "description": {
+                                "type": "string",
+                                "example": "Description modifiée"
+                            },
+                            "date_debut": {
+                                "type": "date",
+                                "example": "2022-03-23"
+                            },
+                            "date_echeance": {
+                                "type": "date",
+                                "example": "2022-03-23"
+                            },
+                            "complete": {
+                                "type": "boolean",
+                                "example": "false"
+                            }
                         }
                     }
                     
@@ -1395,15 +1408,6 @@
                     }
                 },
                 "required": ["courriel_utilisateur", "motDePasse_utilisateur"]
-            },
-            "Reponse_generer_cleAPI" : {
-                "type": "object",
-                "properties" : {
-                    "message": {
-                        "type": "string",
-                        "example": "Voici la nouvelle clé d'API générée : 12345678"
-                    }
-                }
             },
             "Erreur400" : {
                 "type": "object",
