@@ -48,8 +48,8 @@ Taches.verifierExistenceIdSousTache = (id_sous_tache) => {
  * @returns 
  */
 Taches.obtenirIDUtilisateur = (cleApi) => {
-    return new Promise((reject) => {
-        let requete = "SELECT id FROM utilisateur WHERE cle_api = $1";
+    return new Promise((resolve, reject) => {
+        let requete = "SELEC id FROM utilisateur WHERE cle_api = $1";
         let params = [cleApi];
         sql.query(requete, params, (erreur, resultats) => {
             if (erreur) {
