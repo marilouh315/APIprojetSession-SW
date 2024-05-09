@@ -7,7 +7,7 @@ const appJSModel = require("../models/appJS.model.js");
  */
 exports.afficherToutesTaches = (req, res) => {
     const cleApi = req.headers.authorization;
-    appJSModel.afficherToutesTaches(cleApi)
+    appJSModel.afficherToutesTaches(cleApi_a)
     .then((taches_resultat) => {
         if (!taches_resultat) {
             res.status(404).json;
