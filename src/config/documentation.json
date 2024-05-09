@@ -472,9 +472,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "message": {
-                            "type": "string",
-                            "example":  "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                        "description": "La tâche a été supprimée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "string",
+                                    "example": "La tâche ainsi que tous ses sous-tâches reliées (s'il y a lieu) ont été supprimées avec succès!"
+                                }
+                            }
                         }
                     },
                     "400": {
@@ -719,9 +724,14 @@
                 },
                 "responses": {
                     "200": {
-                        "message": {
-                            "type": "string",
-                            "example": "Le statut de la sous-tâche, avec l'id 11, a été modifié avec succès. Nouveau statut : false."
+                        "description": "Le statut de la sous-tâche a été modifié avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "string",
+                                    "example": "Le statut de la sous-tâche, avec l'id 11, a été modifié avec succès. Nouveau statut : false."
+                                }
+                            }
                         }
                     },
                     "400": {
@@ -805,9 +815,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "message": {
-                            "type": "string",
-                            "example":  "La sous-tâche avec l'ID 11 a été supprimé avec succès"
+                        "description": "La tâche a été supprimé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "string",
+                                    "example": "La sous-tâche avec l'ID 11 a été supprimé avec succès."
+                                }
+                            }
                         }
                     },
                     "400": {
@@ -953,9 +968,14 @@
                 },
                 "responses": {
                     "200": {
-                        "message": {
-                            "type": "string",
-                            "example": "Voici la nouvelle clé d'API générée : 12345678"
+                        "description": "La clé d'API a été générée avec succès!",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                    "type": "string",
+                                    "example": "Voici la nouvelle clé d'API générée : 12345678"
+                                }
+                            }
                         }
                     },
                     "400": {
